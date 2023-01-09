@@ -44,12 +44,14 @@ func (m MysqlConfig) Dsn() string {
 // @Date: 2023-01-08 19:10:33
 // @Description: Redis配置
 type RedisConfig struct {
-	Options *redis.Options
-	Ip      string
-	Port    string
+	Options  *redis.Options
+	Ip       string
+	Port     string
+	Password string
 }
 
 func (r RedisConfig) RedisOptions() *redis.Options {
 	r.Options.Addr = r.Ip + ":" + r.Port
+	r.Options.Password = r.Password
 	return r.Options
 }

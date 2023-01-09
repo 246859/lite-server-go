@@ -3,6 +3,7 @@ package global
 import (
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"liteserver/initialize"
 )
@@ -11,7 +12,7 @@ var (
 	Redis       *redis.Client
 	GormDBGroup *initialize.GormDBGroup
 	Viper       *viper.Viper
-	Logger      interface{}
+	Logger      *zap.Logger
 )
 
 // GetDefaultGormDB

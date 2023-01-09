@@ -1,3 +1,22 @@
+# Http服务器配置
+server:
+  port: 8080
+  mode: dev
+
+# Zap日志配置
+zap:
+  level: -1
+  development: true
+  caller: true
+  encode: json
+  outputPath:
+    - "stdout"
+    - "./log/log.json"
+  errOutputPath:
+    - "stdout"
+    - "./log/error.json"
+
+# 数据库配置
 database:
   main:
     enable: true
@@ -11,13 +30,16 @@ database:
     maxIdleCons: 20
     maxOpenCons: 20
 
+#Redis配置
 redis:
-  ip: 11
-  port: 11
+  ip: 192.168.48.134
+  port: 6379
+  Password: wyh246859
   options:
     maxRetries: 3
     minIdleConns: 6
 
+#Jwt配置
 jwt:
   signKey: vegetable-programmer
   accessExpiredTime: 2

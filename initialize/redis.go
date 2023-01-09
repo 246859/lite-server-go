@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"context"
+
 	"github.com/go-redis/redis/v8"
 	"liteserver/config"
 )
@@ -11,5 +13,10 @@ import (
 // @Param: config *config.RedisConfig
 // @Return: *redis.Client
 func InitRedis(config *config.RedisConfig) *redis.Client {
-	return redis.NewClient(config.RedisOptions())
+	client := redis.NewClient(config.RedisOptions())
+	_, err := client.Ping(context.Background()).Result()
+	if err != nil {
+		panic(err)
+	}
+	return client
 }

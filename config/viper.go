@@ -1,15 +1,18 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/spf13/viper"
 )
 
+// Config
+// @Date: 2023-01-09 13:48:50
+// @Description: 全局配置结构体，映射了整个配置文件
 type Config struct {
 	DataBaseConfig *DataBaseConfigGroup `mapstructure:"database"`
 	RedisConfig    *RedisConfig         `mapstructure:"redis"`
 	JwtConfig      *JwtConfig           `mapstructure:"jwt"`
+	ServerConfig   *ServerConfig        `mapstructure:"server"`
+	ZapConfig      *ZapConfig           `mapstructure:"zap"`
 }
 
 // ReadConfig
@@ -35,7 +38,6 @@ func ReadConfig(cfgPath string) (*viper.Viper, error) {
 // @Return: *Config
 // @Return: error
 func RefreshConfig(viper *viper.Viper) (*Config, error) {
-	fmt.Println(viper.AllSettings())
 	var config Config
 	err := viper.Unmarshal(&config)
 	if err != nil {

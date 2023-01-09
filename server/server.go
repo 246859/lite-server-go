@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"flag"
 
 	"github.com/fsnotify/fsnotify"
@@ -41,6 +42,10 @@ func (s *Server) loadConfig() error {
 // @Receiver: s *Server
 // @Return: error
 func (s *Server) loadEnv() error {
+	if global.Config == nil {
+		return errors.New("应用环境加载异常")
+	}
+	global.Logger = initialize.InitZap(global.Config.ZapConfig)
 	global.Redis = initialize.InitRedis(global.Config.RedisConfig)
 	global.GormDBGroup = initialize.InitGorm(global.Config.DataBaseConfig)
 	return nil
