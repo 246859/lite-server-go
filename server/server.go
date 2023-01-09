@@ -46,6 +46,8 @@ func (s *Server) loadEnv() error {
 		return errors.New("应用环境加载异常")
 	}
 	global.Logger = initialize.InitZap(global.Config.ZapConfig)
+	global.Logger.Info("日志初始化完成")
+	global.Logger.Error("test")
 	global.Redis = initialize.InitRedis(global.Config.RedisConfig)
 	global.GormDBGroup = initialize.InitGorm(global.Config.DataBaseConfig)
 	return nil

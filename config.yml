@@ -5,16 +5,18 @@ server:
 
 # Zap日志配置
 zap:
-  level: -1
-  development: true
+  level: debug
   caller: true
-  encode: json
-  outputPath:
-    - "stdout"
-    - "./log/log.json"
-  errOutputPath:
-    - "stdout"
-    - "./log/error.json"
+  stackTrace: false
+  encode: console
+  # 日志输出到哪里 file | console | both
+  writer: both
+  logFile:
+    maxSize: 20
+    backups: 5
+    compress: true
+    output:
+      - "./log/output.log"
 
 # 数据库配置
 database:
