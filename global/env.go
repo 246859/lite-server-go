@@ -5,12 +5,12 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"liteserver/initialize"
+	"liteserver/config"
 )
 
 var (
 	Redis       *redis.Client
-	GormDBGroup *initialize.GormDBGroup
+	GormDBGroup *config.GormDBGroup
 	Viper       *viper.Viper
 	Logger      *zap.Logger
 )

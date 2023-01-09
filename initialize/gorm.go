@@ -8,16 +8,14 @@ import (
 	"liteserver/config"
 )
 
-type GormDBGroup = map[string]*gorm.DB
-
 // InitGorm
 // @Date: 2023-01-08 22:52:21
 // @Description: 初始化GORM连接数据库
 // @Param: configGroup config.DataBaseConfigGroup
 // @Return: error
-func InitGorm(configGroup *config.DataBaseConfigGroup) *GormDBGroup {
+func InitGorm(configGroup *config.DataBaseConfigGroup) *config.GormDBGroup {
 
-	gormGroup := GormDBGroup{}
+	gormGroup := config.GormDBGroup{}
 
 	// 遍历db map，根据dp的类型进行初始化
 	for name, databaseConfig := range *configGroup {

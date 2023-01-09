@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
+	"gorm.io/gorm"
 )
 
 var (
@@ -14,6 +15,7 @@ var (
 	RedisLoadConfigErr = errors.New("redis load config failed")
 )
 
+type GormDBGroup = map[string]*gorm.DB
 type DataBaseConfigGroup = map[string]*DataBaseConfig
 
 // DataBaseConfig
