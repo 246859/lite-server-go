@@ -1,0 +1,26 @@
+database:
+  main:
+    enable: true
+    type: Mysql
+    ip: 192.168.48.134
+    port: 3306
+    dbName: liteserver
+    config: charset=utf8mb4&parseTime=True&loc=Local
+    username: root
+    password: wyh246859
+    maxIdleCons: 20
+    maxOpenCons: 20
+
+redis:
+  ip: 11
+  port: 11
+  options:
+    maxRetries: 3
+    minIdleConns: 6
+
+jwt:
+  signKey: vegetable-programmer
+  accessExpiredTime: 2
+  refreshExpiredTime: 24*5
+  issuer: lite-blog-server
+
