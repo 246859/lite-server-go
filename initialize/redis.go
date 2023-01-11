@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 	"liteserver/config"
 )
 
@@ -16,7 +17,7 @@ func InitRedis(config *config.RedisConfig) *redis.Client {
 	client := redis.NewClient(config.RedisOptions())
 	_, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		panic(err)
+		zap.L().Panic("Redis客户端连接失败", zap.Error(err))
 	}
 	return client
 }

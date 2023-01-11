@@ -40,6 +40,10 @@ func InitGorm(configGroup *config.DataBaseConfigGroup) *config.GormDBGroup {
 	return &gormGroup
 }
 
+func CloseGormGroup(group config.GormDBGroup) error {
+	return nil
+}
+
 // gormMysql
 // @Date: 2023-01-09 10:46:47
 // @Description: mysql建立连接

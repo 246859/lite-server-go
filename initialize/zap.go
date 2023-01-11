@@ -13,7 +13,9 @@ import (
 // @Return: *zap.Logger
 func InitZap(config *config.ZapConfig) *zap.Logger {
 	subCore, options := tee(config)
-	return zap.New(subCore, options...)
+	logger := zap.New(subCore, options...)
+	zap.ReplaceGlobals(logger)
+	return logger
 }
 
 // tee
