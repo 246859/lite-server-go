@@ -1,7 +1,23 @@
 # Http服务器配置
 server:
+  mode: debug
+  # 端口
   port: 8080
-  mode: dev
+  # 秒为单位
+  # 读取整个请求的超时时间
+  readTimeout: 15
+  # 写入响应体的超时时间
+  writeTimeout: 10
+  # 读取请求头的超时时间
+  readHeaderTimeout: 5
+  # Keep-alive连接复用的超时时间
+  idleTimeout: 600
+  # Multipart最大内存 50MB
+  multipartMemory: 52428800
+  # 请求头最大大小 3MB
+  maxHeaderBytes: 3145728
+  # 静态地址
+  static: /static
 
 # Zap日志配置
 zap:
