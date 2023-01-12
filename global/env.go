@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"liteserver/config"
+	"liteserver/i18n"
 )
 
 var (
@@ -13,6 +14,7 @@ var (
 	GormDBGroup *config.GormDBGroup
 	Viper       *viper.Viper
 	Logger      *zap.Logger
+	I18nLocale  *i18n.I18nLocale
 )
 
 // GetDefaultGormDB
