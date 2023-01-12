@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"liteserver/config"
+	"liteserver/utils/fileutils"
 )
 
 // InitZap
@@ -11,8 +12,9 @@ import (
 // @Description: Zap初始化
 // @Param: config *config.ZapConfig
 // @Return: *zap.Logger
-func InitZap(config *config.ZapConfig) *zap.Logger {
-	subCore, options := tee(config)
+func InitZap(cfg *config.ZapConfig) *zap.Logger {
+	initZapOutput(cfg.LogFile.Output)
+	subCore, options := tee(cfg)
 	logger := zap.New(subCore, options...)
 	zap.ReplaceGlobals(logger)
 	return logger
@@ -35,4 +37,10 @@ func tee(cfg *config.ZapConfig) (core zapcore.Core, options []zap.Option) {
 		zapcore.NewCore(filenCoder, fileSyncer, levelEnabler),
 	)
 	return combineCore, cfg.BuildOptions(levelEnabler)
+}
+
+func initZapOutput(output []string) {
+	for _, filePath := range output {
+		fileutils.MustCreateDirAndFile(filePath)
+	}
 }

@@ -43,7 +43,6 @@ type LogFileConfig struct {
 	BackUps  int      `yaml:"backups" mapstructure:"backups"`
 	Compress bool     `yaml:"compress" mapstructure:"compress"`
 	Output   []string `yaml:"output" mapstructure:"output"`
-	Errput   []string `yaml:"errput" mapstructure:"errput"`
 }
 
 // customTimeFormatEncoder
@@ -140,6 +139,11 @@ func (z *ZapConfig) ZapConsoleEncoder() zapcore.Encoder {
 	encodeConfig := z.newEncodeConfig()
 	// 控制台开启颜色输出
 	encodeConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	// 简短的调用者输出
+	encodeConfig.EncodeCaller = zapcore.ShortCallerEncoder
+	// 完整的序列化logger名称
+	encodeConfig.EncodeName = zapcore.FullNameEncoder
+
 	return z.judgeConfigEncoder(encodeConfig)
 }
 
@@ -152,6 +156,11 @@ func (z *ZapConfig) ZapFileEncoder() zapcore.Encoder {
 	encodeConfig := z.newEncodeConfig()
 	// 文件关闭颜色输出
 	encodeConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	// 简短的调用者输出
+	encodeConfig.EncodeCaller = zapcore.FullCallerEncoder
+	// 完整的序列化logger名称
+	encodeConfig.EncodeName = zapcore.FullNameEncoder
+
 	return z.judgeConfigEncoder(encodeConfig)
 }
 
@@ -195,10 +204,6 @@ func (z *ZapConfig) newEncodeConfig() zapcore.EncoderConfig {
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	// 秒级时间间隔
 	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
-	// 简短的调用者输出
-	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-	// 完整的序列化logger名称
-	encoderConfig.EncodeName = zapcore.FullNameEncoder
 
 	return encoderConfig
 }
