@@ -27,7 +27,6 @@ func InitGorm(configGroup *config.DataBaseConfigGroup) *config.GormDBGroup {
 		switch sqlType {
 		case config.Mysql:
 			{
-
 				gormGroup[name] = gormMysql(databaseConfig)
 			}
 		case config.PostgreSql:
