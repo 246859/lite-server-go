@@ -17,6 +17,9 @@ import (
 
 var (
 	defaultConfigPath = "./config.yml"
+
+	errLoadEnv    = errors.New("应用环境加载异常")
+	errLoadConfig = errors.New("应用配置加载异常")
 )
 
 type Server struct {
@@ -53,10 +56,13 @@ func (s *Server) loadConfig() error {
 // @Return: error
 func (s *Server) loadEnv() error {
 	if global.Config == nil {
-		return errors.New("应用环境加载异常")
+		return errLoadConfig
 	}
 	// 初始化日志
 	global.Logger = initialize.InitZap(global.Config.ZapConfig)
+	zap.L().Info("应用日志系统初始化完毕!")
+	// 初始化国际化语言信息
+	global.I18nLocale = initialize.InitI18nInfo(global.Config.I18nConfig)
 	// 初始化Redis连接
 	global.Redis = initialize.InitRedis(global.Config.RedisConfig)
 	// 初始化GORM和数据库
@@ -103,10 +109,16 @@ func (s *Server) Run() {
 // @Description: 优雅的关闭应用
 // @Receiver: s *Server
 func (s *Server) ShutDown() {
+	s.beforeShutDown()
 	err := s.server.Shutdown(context.Background())
 	if err != nil {
 		zap.L().Fatal("Http服务器无法正常关闭，应用程序将立即停止", zap.Error(err))
 	}
+}
+
+func (s *Server) beforeShutDown() {
+	zap.L().Info("应用正常关闭")
+	// TODO 这里做一些在关闭服务器之前要做的事情
 }
 
 func (s *Server) refresh() {
