@@ -13,6 +13,7 @@ type Config struct {
 	JwtConfig      *JwtConfig           `mapstructure:"jwt"`
 	ServerConfig   *ServerConfig        `mapstructure:"server"`
 	ZapConfig      *ZapConfig           `mapstructure:"zap"`
+	I18nConfig     *I18nConfig          `mapstructure:"i18n"`
 }
 
 // ReadConfig
