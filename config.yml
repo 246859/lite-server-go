@@ -19,6 +19,11 @@ server:
   # 静态地址
   static: /static
 
+# 国际化配置
+i18n:
+  dir: ./lang
+  suffix: .properties
+
 # Zap日志配置
 zap:
   prefix: Lite-Blog-Server
