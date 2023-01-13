@@ -3,6 +3,8 @@ package test
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 	"testing"
 )
 
@@ -24,4 +26,12 @@ func TestLoadConfig(t *testing.T) {
 	man = &Man{}
 	json.Unmarshal([]byte(str), &man)
 	fmt.Println(man.Talk())
+}
+
+func TestDefaultConfig(t *testing.T) {
+	temp, err := os.Open("../template/defaultConfig.yml")
+	fmt.Println(err)
+	dist, err := os.Create("./config2.yml")
+	fmt.Println(err)
+	fmt.Println(io.Copy(dist, temp))
 }
