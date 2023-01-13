@@ -13,6 +13,6 @@
 
 # 编辑器缓存文件夹
 .idea
-/log
+bin/
 # Dependency directories (remove the comment below to include it)
 # vendor/
