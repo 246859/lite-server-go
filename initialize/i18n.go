@@ -7,7 +7,7 @@ import (
 	"liteserver/i18n"
 	"liteserver/utils/fileutils"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -15,13 +15,14 @@ import (
 // @Date 2023-01-12 17:22:11
 // @Description: 初始化应用国际化信息
 func InitI18nInfo(cfg *config.I18nConfig) *i18n.I18nLocale {
+	langdir := fileutils.JoinPath(cfg.Dir)
 	// 创建文件夹
-	fileutils.MustMkdir(cfg.Dir)
-	dir, _ := os.ReadDir(cfg.Dir)
+	fileutils.MustMkdir(langdir)
+	dir, _ := os.ReadDir(langdir)
 	locale := i18n.I18nLocale{}
 	// 读取目录下语言文件
 	for _, entry := range dir {
-		entryPath := path.Join(cfg.Dir, entry.Name())
+		entryPath := filepath.Join(langdir, entry.Name())
 		if !entry.IsDir() && strings.Contains(entryPath, cfg.Suffix) {
 			localeName := strings.ReplaceAll(entry.Name(), cfg.Suffix, "")
 			// 解析render

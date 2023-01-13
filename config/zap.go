@@ -2,6 +2,7 @@ package config
 
 import (
 	"io"
+	"liteserver/utils/fileutils"
 	"os"
 	"strings"
 	"time"
@@ -124,7 +125,7 @@ func (z *ZapConfig) ZapFileWriterSyncer() zapcore.WriteSyncer {
 		// 添加日志输出器
 		for _, path := range z.LogFile.Output {
 			logger := &lumberjack.Logger{
-				Filename:   path,
+				Filename:   fileutils.JoinPath(path),
 				MaxSize:    z.LogFile.MaxSize,
 				MaxBackups: z.LogFile.BackUps,
 				Compress:   z.LogFile.Compress,

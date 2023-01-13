@@ -41,6 +41,6 @@ func tee(cfg *config.ZapConfig) (core zapcore.Core, options []zap.Option) {
 
 func initZapOutput(output []string) {
 	for _, filePath := range output {
-		fileutils.MustCreateDirAndFile(filePath)
+		fileutils.MustCreateDirAndFile(fileutils.JoinPath(filePath))
 	}
 }

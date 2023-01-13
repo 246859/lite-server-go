@@ -2,7 +2,7 @@ package utils
 
 import (
 	"go.uber.org/zap"
-	"liteserver/global"
+	"go.uber.org/zap/zapcore"
 	"log"
 )
 
@@ -24,11 +24,12 @@ func MustOrPanic(f func() error) {
 // @Description: 必须完成某一个操作，否则就panic并记录日志
 func MustOrLogPanic(f func() error, msg string, field ...zap.Field) {
 	if err := f(); err != nil {
-		if global.Logger != nil {
-			field = append(field, zap.Error(err))
-			zap.L().Panic(msg, field...)
-		} else {
+		logger := zap.L()
+		// 判断是否是nopcore
+		if logger.Level() == zapcore.InvalidLevel {
 			log.Panicln(msg, err)
+		} else {
+			logger.Panic(msg, field...)
 		}
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"liteserver/utils"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 )
 
@@ -53,9 +52,9 @@ func MustCreateFile(filepath string) {
 // @Date 2023-01-12 18:19:36
 // @Param filepath string
 // @Description: 必须创建文件，否则就panic
-func MustCreateDirAndFile(filepath string) {
-	MustMkdir(path.Dir(filepath))
-	MustCreateFile(filepath)
+func MustCreateDirAndFile(path string) {
+	MustMkdir(filepath.Dir(path))
+	MustCreateFile(path)
 }
 
 // GetCurrentPath
@@ -69,4 +68,16 @@ func GetCurrentPath() string {
 		return ""
 	}
 	return filepath.Dir(abs)
+}
+
+// JoinPath
+// @Date 2023-01-13 21:44:17
+// @Param path string
+// @Return string
+// @Description: 如果是相对路径就拼接，如果是绝对路径就返回
+func JoinPath(path string) string {
+	if filepath.IsAbs(path) {
+		return path
+	}
+	return filepath.Join(GetCurrentPath(), path)
 }
