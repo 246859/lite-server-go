@@ -3,6 +3,7 @@ package config
 import (
 	"io"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/natefinch/lumberjack"
@@ -52,7 +53,11 @@ type LogFileConfig struct {
 // @Param: encoder zapcore.PrimitiveArrayEncoder
 func customTimeFormatEncoder(cfg *ZapConfig) zapcore.TimeEncoder {
 	return func(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
-		encoder.AppendString(cfg.Prefix + "\t" + t.Format(cfg.TimeFormat))
+		builder := strings.Builder{}
+		builder.WriteString(cfg.Prefix)
+		builder.WriteString("\t")
+		builder.WriteString(t.Format(cfg.TimeFormat))
+		encoder.AppendString(builder.String())
 	}
 }
 
