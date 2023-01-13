@@ -170,7 +170,7 @@ func (s *Server) generateDefaultConfig() {
 		log.Panicln("默认配置文件读取失败:"+defaultConfig, err)
 	}
 	// 将默认内容写入配置文件路径内
-	if err := os.WriteFile(s.ConfigPath, templateCfg, os.ModeAppend); err != nil {
+	if err := os.WriteFile(s.ConfigPath, templateCfg, os.FileMode(0644)); err != nil {
 		log.Panicln("默认配置创建异常:"+defaultTargetConfigPath, err)
 	}
 	log.Printf("默认配置文件已创建在%s，请完善配置文件内容后再次启动应用程序", s.ConfigPath)
