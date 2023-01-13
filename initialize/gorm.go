@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"go.uber.org/zap"
+	"liteserver/utils"
 	"strings"
 
 	"gorm.io/driver/mysql"
@@ -39,8 +41,14 @@ func InitGorm(configGroup *config.DataBaseConfigGroup) *config.GormDBGroup {
 	return &gormGroup
 }
 
-func CloseGormGroup(group config.GormDBGroup) error {
-	return nil
+func CloseGormGroup(group *config.GormDBGroup) {
+	g := *group
+	for name, gormDB := range g {
+		db, _ := gormDB.DB()
+		utils.MustOrLogPanic(func() error {
+			return db.Close()
+		}, "数据库关闭失败", zap.String("数据库名", name))
+	}
 }
 
 // gormMysql
