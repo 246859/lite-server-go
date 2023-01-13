@@ -1,0 +1,106 @@
+# Http服务器配置
+server:
+  # 运行模式
+  mode: debug
+  # 端口
+  port: 8080
+  # 秒为单位
+  # 读取整个请求的超时时间
+  readTimeout: 15
+  # 写入响应体的超时时间
+  writeTimeout: 10
+  # 读取请求头的超时时间
+  readHeaderTimeout: 5
+  # Keep-alive连接复用的超时时间
+  idleTimeout: 600
+  # Multipart最大内存 50MB
+  multipartMemory: 52428800
+  # 请求头最大大小 3MB
+  maxHeaderBytes: 3145728
+  # 静态地址
+  static: /static
+
+# 国际化配置
+i18n:
+  # 国际化多语言文件目录
+  dir: ./lang
+  # 语言文件类型
+  suffix: .properties
+
+# Zap日志配置
+zap:
+  # 日志前缀
+  prefix: Lite-Blog-Server
+  # Go 风格的日志格式化
+  timeFormat: 2006/01/02 - 15:04:05.00000
+  # 日志级别
+  level: debug
+  # 是否显示调用者
+  caller: true
+  # 是否显示堆栈信息
+  stackTrace: false
+  # 输出风格
+  encode: console
+  # 日志输出到哪里 file | console | both
+  writer: both
+  # 日志文件配置
+  logFile:
+    # 日志文件大小MB
+    maxSize: 20
+    # 备份次数
+    backups: 5
+    # 是否压缩
+    compress: true
+    # 输出路径
+    output:
+      - "./log/output.log"
+
+# 数据库配置
+database:
+  # 数据库分组名称
+  main:
+    # 是否启用
+    enable: true
+    # 数据库类型
+    type: Mysql
+    # 数据库IP
+    ip: 127.0.0.1
+    # 端口
+    port: 3306
+    # 数据库名称
+    dbName: liteserver
+    # 数据连接配置
+    config: charset=utf8mb4&parseTime=True&loc=Local
+    # 用户名
+    username: root
+    # 密码
+    password: password
+    # 最大空闲连接数
+    maxIdleCons: 20
+    # 最大连接开启数量
+    maxOpenCons: 20
+
+#Redis配置
+redis:
+  # Redis服务端Ip
+  ip: 127.0.0.1
+  # Redis服务端端口
+  port: 6379
+  # 认证
+  Password: password
+  # 配置
+  options:
+    maxRetries: 3
+    minIdleConns: 6
+
+#Jwt配置
+jwt:
+  # 签名密钥
+  signKey: signkey
+  # 认证过期时间
+  accessExpiredTime: 2
+  # 刷新过期时间
+  refreshExpiredTime: 24*5
+  # 签名者
+  issuer: issuer
+
