@@ -4,7 +4,9 @@ import (
 	"go.uber.org/zap"
 	"liteserver/utils"
 	"os"
+	"os/exec"
 	"path"
+	"path/filepath"
 )
 
 // IsExist
@@ -54,4 +56,17 @@ func MustCreateFile(filepath string) {
 func MustCreateDirAndFile(filepath string) {
 	MustMkdir(path.Dir(filepath))
 	MustCreateFile(filepath)
+}
+
+// GetCurrentPath
+// @Date 2023-01-13 19:42:52
+// @Return string
+// @Description: 获取当前执行文件的系统绝对路径
+func GetCurrentPath() string {
+	lookPath, _ := exec.LookPath(os.Args[0])
+	abs, err := filepath.Abs(lookPath)
+	if err != nil {
+		return ""
+	}
+	return filepath.Dir(abs)
 }

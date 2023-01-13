@@ -15,6 +15,8 @@ var (
 	Viper       *viper.Viper
 	Logger      *zap.Logger
 	I18nLocale  *i18n.I18nLocale
+
+	WorkDir string
 )
 
 // GetDefaultGormDB
