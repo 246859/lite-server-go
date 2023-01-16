@@ -21,7 +21,7 @@ func newEngine(cfg *config.ServerConfig) *gin.Engine {
 // installPlugins
 // @Date 2023-01-11 16:35:02
 // @Param engine *gin.Engine
-// @Description: 安装Gin插件
+// @Description: 安装Gin全局插件
 func installPlugins(engine *gin.Engine) {
 	engine.Use(
 		middleware.ZapLogger(),
@@ -33,7 +33,7 @@ func installPlugins(engine *gin.Engine) {
 // @Param engine *gin.Engine
 // @Description: 安装Gin路由
 func installRouter(engine *gin.Engine) {
-	// TODO 以后这里要初始化Router
+	InitRouter(engine)
 }
 
 // configHttpServer

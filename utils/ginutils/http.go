@@ -5,15 +5,15 @@ import (
 	"net/http"
 )
 
-type httpHandleMethod = func(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes
+type HttpHandleMethod = func(relativePath string, handlers ...gin.HandlerFunc) gin.IRoutes
 
-// judgeMethodType
+// JudgeMethod
 // @Date 2023-01-16 19:03:41
 // @Param method string
 // @Param group gin.RouterGroup
 // @Return httpHandleMethod
 // @Description: 根据http请求的类型来返回对应的方法
-func judgeMethod(method string, group gin.RouterGroup) httpHandleMethod {
+func JudgeMethod(method string, group *gin.RouterGroup) HttpHandleMethod {
 	switch method {
 	case http.MethodGet:
 		return group.GET
