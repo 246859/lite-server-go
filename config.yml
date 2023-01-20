@@ -66,8 +66,10 @@ redis:
 
 #Jwt配置
 jwt:
-  signKey: vegetable-programmer
-  accessExpiredTime: 2
-  refreshExpiredTime: 24*5
+  acSign: vegetable-programmer-access-token
+  reSign: vegetable-programmer-refresh-token
   issuer: lite-blog-server
+  acExp: 2
+  acAlo: 10
+  reExp: 24*5
 
