@@ -2,7 +2,7 @@ package public
 
 import (
 	"github.com/gin-gonic/gin"
-	"liteserver/model/response"
+	"liteserver/utils/response"
 )
 
 type Ping struct{}

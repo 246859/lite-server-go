@@ -40,6 +40,14 @@ func NewResponse(c *gin.Context, status int, code code.BusinessCode, data interf
 	})
 }
 
+func NilBody(c *gin.Context, status int, code code.BusinessCode, msg string) {
+	NewResponse(c, status, code, nil, msg)
+}
+
+func Forbidden(c *gin.Context, businessCode code.BusinessCode, msg string) {
+	NewResponse(c, http.StatusForbidden, businessCode, nil, msg)
+}
+
 func Ok(c *gin.Context) {
 	NewResponse(c, http.StatusOK, code.Success, nil, "")
 }
