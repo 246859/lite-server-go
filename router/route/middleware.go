@@ -3,7 +3,8 @@ package route
 import "github.com/gin-gonic/gin"
 
 const (
-	RouterCfgKey = "apiCfg"
+	// RouterCfgKey 路由配置的key
+	RouterCfgKey = "cfg"
 )
 
 // MiddleWareRoute
@@ -13,7 +14,20 @@ type MiddleWareRoute struct {
 	// 中间件
 	Middleware []gin.HandlerFunc
 	// 配置，在请求到达时会将对应的配置传入context
-	Config gin.H
+	Config *Config
+}
+
+// Config
+// @Date 2023-01-23 19:54:22
+// @Description: 路由配置结构体
+type Config struct {
+	// 是否需要认证
+	Auth bool
+	// 访问次数控制
+	Limit int
+	// 访问权限控制
+	// TODO 暂时没想好perm的类型
+	Perm interface{}
 }
 
 // ConfigMiddleWare
