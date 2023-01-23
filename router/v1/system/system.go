@@ -4,6 +4,10 @@ import (
 	"liteserver/router/route"
 )
 
+const (
+	System = "system"
+)
+
 type SystemRouter struct {
 }
 

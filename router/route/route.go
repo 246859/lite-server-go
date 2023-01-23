@@ -8,7 +8,7 @@ import (
 // @Date 2023-01-16 21:36:36
 // @Description: 表示一个对应的接口
 type Api struct {
-	MiddleWareRoute
+	Mds *MiddleWareRoute
 	// 路径
 	Path string
 	// 接口的方法类型
@@ -21,7 +21,7 @@ type Api struct {
 // @Date 2023-01-16 21:37:36
 // @Description: 表示一个对应的接口分组
 type ApiGroup struct {
-	MiddleWareRoute
+	Mds *MiddleWareRoute
 	// 路径
 	Path string
 	// 该分组下的一组平行路由

@@ -5,6 +5,10 @@ import (
 	"liteserver/router/v1/public/article"
 )
 
+const (
+	Public = "public"
+)
+
 type PublicRouter struct {
 }
 

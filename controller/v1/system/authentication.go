@@ -11,6 +11,9 @@ type Authentication struct {
 // Login
 // @Date 2023-01-16 16:04:15
 // @Param c *gin.Context
+// @Param username string
+// @Param password string
+// @Method GET
 // @Description: 登录接口
 func (a Authentication) Login(c *gin.Context) {
 

@@ -81,6 +81,8 @@ func (s *Server) loadEnv() error {
 	global.GormDBGroup = initialize.InitGorm(global.Config.DataBaseConfig)
 	// 初始化表
 	initialize.IniTables(model.ModelTableGroup, global.GormDBGroup)
+	// 设置工作目录
+	global.Config.ServerConfig.WorkDir = global.WorkDir
 	// 初始化Http服务器
 	s.server = initialize.InitHttpServer(global.Config.ServerConfig)
 	return nil

@@ -32,8 +32,8 @@ func installPlugins(engine *gin.Engine) {
 // @Date 2023-01-11 16:39:10
 // @Param engine *gin.Engine
 // @Description: 安装Gin路由
-func installRouter(engine *gin.Engine) {
-	InitRouter(engine)
+func installRouter(engine *gin.Engine, cfg *config.ServerConfig) {
+	InitRouter(engine, cfg)
 }
 
 // configHttpServer
@@ -60,6 +60,6 @@ func configHttpServer(engine *gin.Engine, cfg *config.ServerConfig) *http.Server
 func InitHttpServer(cfg *config.ServerConfig) *http.Server {
 	engine := newEngine(cfg)
 	installPlugins(engine)
-	installRouter(engine)
+	installRouter(engine, cfg)
 	return configHttpServer(engine, cfg)
 }

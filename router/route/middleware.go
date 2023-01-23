@@ -1,20 +1,26 @@
 package route
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"liteserver/middleware"
+)
 
 const (
 	// RouterCfgKey 路由配置的key
 	RouterCfgKey = "cfg"
 )
 
+// Md 别名 中间件
+type Md = []gin.HandlerFunc
+
 // MiddleWareRoute
 // @Date 2023-01-16 21:36:55
 // @Description: 中间件和对应的配置
 type MiddleWareRoute struct {
 	// 中间件
-	Middleware []gin.HandlerFunc
+	Mds Md
 	// 配置，在请求到达时会将对应的配置传入context
-	Config *Config
+	Cfg *Config
 }
 
 // Config
@@ -36,8 +42,20 @@ type Config struct {
 // @Description: 路由中间件配置
 func (m MiddleWareRoute) ConfigMiddleWare() []gin.HandlerFunc {
 	config := func(c *gin.Context) {
-		c.Set(RouterCfgKey, m.Config)
+		c.Set(RouterCfgKey, m.Cfg)
 		c.Next()
 	}
-	return append([]gin.HandlerFunc{config}, m.Middleware...)
+	return append([]gin.HandlerFunc{config}, m.Mds...)
+}
+
+// GeneralMiddleware
+// @Date 2023-01-23 21:04:50
+// @Return *MiddleWareRoute
+// @Method
+// @Description: 同游路由中间件配置
+func GeneralMiddleware() *MiddleWareRoute {
+	md := &MiddleWareRoute{
+		Mds: Md{middleware.JwtMiddleWare()},
+	}
+	return md
 }

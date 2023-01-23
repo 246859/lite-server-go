@@ -52,6 +52,16 @@ type ServerConfig struct {
 	// @Date 2023-01-11 16:57:04
 	// @Description: 最大请求大小
 	MaxHeaderBytes int `yaml:"maxHeaderBytes"`
+
+	// WorkDir
+	// @Date 2023-01-23 22:05:37
+	// @Description: 服务器的工作目录
+	WorkDir string
+
+	// StaticDir
+	// @Date 2023-01-23 22:08:32
+	// @Description: 静态文件的存放路径
+	StaticDir string `yaml:"static" mapstructure:"static"`
 }
 
 func (s *ServerConfig) Addr() string {
