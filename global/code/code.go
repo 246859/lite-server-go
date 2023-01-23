@@ -21,4 +21,8 @@ const (
 	RefreshToken = 4012
 	// AccessForbidden 禁止访问
 	AccessForbidden = 4030
+	// AccessNoLogin 用户未登录
+	AccessNoLogin = 4031
+	// AccessNoPerm 没有访问权限
+	AccessNoPerm = 4032
 )
