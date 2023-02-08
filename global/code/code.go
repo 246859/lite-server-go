@@ -25,4 +25,6 @@ const (
 	AccessNoLogin = 4031
 	// AccessNoPerm 没有访问权限
 	AccessNoPerm = 4032
+
+	InternalError = 5000
 )

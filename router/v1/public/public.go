@@ -16,5 +16,7 @@ func (p PublicRouter) InitGroup() route.RouterGroupMap {
 	return route.RouterGroupMap{
 		article.Article: &route.ApiGroup{Path: article.Article, Group: article.ArticleRouterGroup{}},
 		Ping:            &route.ApiGroup{Path: Ping, Router: PingRouter{}},
+		Mail:            &route.ApiGroup{Path: Mail, IsUrl: true, Router: MailRouter{}},
+		Authentication:  &route.ApiGroup{Path: Authentication, IsUrl: true, Router: AuthenticationRouter{}},
 	}
 }

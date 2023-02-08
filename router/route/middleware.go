@@ -2,7 +2,6 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"liteserver/middleware"
 )
 
 const (
@@ -46,16 +45,4 @@ func (m MiddleWareRoute) ConfigMiddleWare() []gin.HandlerFunc {
 		c.Next()
 	}
 	return append([]gin.HandlerFunc{config}, m.Mds...)
-}
-
-// GeneralMiddleware
-// @Date 2023-01-23 21:04:50
-// @Return *MiddleWareRoute
-// @Method
-// @Description: 同游路由中间件配置
-func GeneralMiddleware() *MiddleWareRoute {
-	md := &MiddleWareRoute{
-		Mds: Md{middleware.JwtMiddleWare()},
-	}
-	return md
 }

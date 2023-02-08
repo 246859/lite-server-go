@@ -14,6 +14,7 @@ type Config struct {
 	ServerConfig   *ServerConfig        `mapstructure:"server"`
 	ZapConfig      *ZapConfig           `mapstructure:"zap"`
 	I18nConfig     *I18nConfig          `mapstructure:"i18n"`
+	MailConfig     *MailConfig          `mapstructure:"mail"`
 }
 
 // ReadConfig

@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/gin-gonic/gin"
+	"liteserver/global"
 	"liteserver/global/code"
 	"net/http"
 )
@@ -40,12 +41,42 @@ func NewResponse(c *gin.Context, status int, code code.BusinessCode, data interf
 	})
 }
 
+// NilBody
+// @Date 2023-02-06 20:17:39
+// @Param c *gin.Context
+// @Param status int
+// @Param code code.BusinessCode
+// @Param msg string
+// @Method
+// @Description: 空响应体
 func NilBody(c *gin.Context, status int, code code.BusinessCode, msg string) {
 	NewResponse(c, status, code, nil, msg)
 }
 
+// Forbidden
+// @Date 2023-02-06 20:18:37
+// @Param c *gin.Context
+// @Param businessCode code.BusinessCode
+// @Param msg string
+// @Method
+// @Description: 403禁止访问
 func Forbidden(c *gin.Context, businessCode code.BusinessCode, msg string) {
-	NewResponse(c, http.StatusForbidden, businessCode, nil, msg)
+	NilBody(c, http.StatusForbidden, businessCode, msg)
+}
+
+// InternalError
+// @Date 2023-02-06 20:18:48
+// @Param c *gin.Context
+// @Param businessCode code.BusinessCode
+// @Param msg string
+// @Method
+// @Description: 500内部错误
+func InternalError(c *gin.Context) {
+	NilBody(c, http.StatusInternalServerError, code.InternalError, global.I18nRawCN("response.internalError"))
+}
+
+func InternalErrorWithMsg(c *gin.Context, msg string) {
+	NilBody(c, http.StatusInternalServerError, code.InternalError, msg)
 }
 
 func Ok(c *gin.Context) {

@@ -1,4 +1,4 @@
-package system
+package public
 
 import (
 	"liteserver/controller"
@@ -9,7 +9,7 @@ import (
 // @Date: 2023-01-16 20:24:57
 // 接口的路径
 const (
-	Authentication = "authentication"
+	Authentication = "authen"
 	Login          = "login"
 	Register       = "register"
 	Logout         = "logout"
@@ -18,7 +18,7 @@ const (
 	RefreshToken   = "refreshToken"
 )
 
-var authenticationApi = controller.ControllerGroup.System.Authentication
+var authenticationApi = controller.ControllerGroup.Public.Authentication
 
 type AuthenticationRouter struct {
 }

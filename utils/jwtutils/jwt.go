@@ -2,9 +2,15 @@ package jwtutils
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	"liteserver/config"
 	"liteserver/utils/uuidtool"
 	"time"
 )
+
+const UserClaimsFlag = "userClaims"
+const UserJwtPayload = "userPayload"
+
+var JwtCfg *config.JwtConfig
 
 // Claims
 // @Date 2023-01-20 20:10:39
@@ -15,7 +21,7 @@ type Claims struct {
 }
 
 type UserClaims struct {
-	UserId   string `json:"userId"`
+	UserId   uint   `json:"userId"`
 	UserUUID string `json:"userUUID"`
 }
 
@@ -44,6 +50,32 @@ func CreateHs256Jwt(userClaims UserClaims, secret string, issuer string, expired
 		return "", err
 	}
 	return jwtString, nil
+}
+
+// CreateAccessToken
+// @Date 2023-02-07 20:29:48
+// @Param userClaims UserClaims
+// @Return string
+// @Return error
+// @Method
+// @Description: 创建AccessToken
+func CreateAccessToken(userClaims UserClaims) (string, error) {
+	return CreateHs256Jwt(userClaims, JwtCfg.AcSign, JwtCfg.Issuer, JwtCfg.AcExpTime())
+}
+
+// CreateRefreshToken
+// @Date 2023-02-07 20:29:56
+// @Param userClaims UserClaims
+// @Return string
+// @Return error
+// @Method
+// @Description: 创建RefreshToken
+func CreateRefreshToken(userClaims UserClaims) (string, error) {
+	return CreateHs256Jwt(userClaims, JwtCfg.ReSign, JwtCfg.Issuer, JwtCfg.ReExpTime())
+}
+
+func SetConfig(cfg *config.JwtConfig) {
+	JwtCfg = cfg
 }
 
 // ParseHs256Jwt

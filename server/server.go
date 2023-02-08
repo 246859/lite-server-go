@@ -75,12 +75,21 @@ func (s *Server) loadEnv() error {
 	zap.L().Info("应用日志系统初始化完毕!")
 	// 初始化国际化语言信息
 	global.I18nLocale = initialize.InitI18nInfo(global.Config.I18nConfig)
+	zap.L().Info("应用多语言配置初始化完毕!")
 	// 初始化Redis连接
 	global.Redis = initialize.InitRedis(global.Config.RedisConfig)
+	zap.L().Info("应用Redis连接成功!")
 	// 初始化GORM和数据库
 	global.GormDBGroup = initialize.InitGorm(global.Config.DataBaseConfig)
+	zap.L().Info("应用GORM初始化成功!")
+	// 初始化JWT配置
+	initialize.InitJwtUtils(global.Config.JwtConfig)
 	// 初始化表
 	initialize.IniTables(model.ModelTableGroup, global.GormDBGroup)
+	zap.L().Info("数据库表适配完成!")
+	// 初始化邮件服务器链接
+	initialize.InitMail(global.Config.MailConfig)
+	zap.L().Info("邮件客户端初始化成功")
 	// 设置工作目录
 	global.Config.ServerConfig.WorkDir = global.WorkDir
 	// 初始化Http服务器
@@ -93,9 +102,13 @@ func (s *Server) loadEnv() error {
 // @Description: 运行Http服务器
 func (s *Server) runHttpServer() {
 	defer s.ShutDown()
+	zap.L().Info("Http服务器正常运行",
+		zap.String("端口", global.Config.ServerConfig.Addr()),
+		zap.String("工作目录", global.Config.ServerConfig.WorkDir))
 	err := s.server.ListenAndServe()
 	if err != nil {
 		zap.L().Error("应用启动失败，即将关闭", zap.Error(err))
+	} else {
 	}
 }
 

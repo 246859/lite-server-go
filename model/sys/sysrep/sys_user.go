@@ -1,4 +1,4 @@
-package sys
+package sysrep
 
 import "gorm.io/gorm"
 
@@ -7,7 +7,7 @@ import "gorm.io/gorm"
 // @Description: 系统用户结构体
 type SystemUser struct {
 	gorm.Model
-	Uuid     uint64 `gorm:"primaryKey;comment:用户ID;" json:"uuid"`
+	Uuid     string `gorm:"primaryKey;comment:用户ID;" json:"uuid"`
 	Username string `gorm:"comment:用户登录账号;" json:"username"`
 	Password string `gorm:"comment:用户登录密码" json:"password"`
 	Nickname string `gorm:"comment:用户昵称;" json:"nickname"`
@@ -15,4 +15,9 @@ type SystemUser struct {
 	Phone    string `gorm:"comment:用户手机号;" json:"phone"`
 	Email    string `gorm:"comment:用户邮箱;" json:"email"`
 	Enable   bool   `gorm:"comment:用户是否启用;" json:"enable"`
+}
+
+type Jwt struct {
+	Access  string `json:"access"`
+	Refresh string `json:"refresh"`
 }

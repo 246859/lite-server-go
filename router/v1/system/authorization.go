@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	Authorization = "authorization"
+	Authorization = "auth"
 )
 
 type AuthorizationRouter struct {

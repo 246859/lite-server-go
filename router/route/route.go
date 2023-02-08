@@ -22,6 +22,8 @@ type Api struct {
 // @Description: 表示一个对应的接口分组
 type ApiGroup struct {
 	Mds *MiddleWareRoute
+	// 是否构成URL
+	IsUrl bool
 	// 路径
 	Path string
 	// 该分组下的一组平行路由

@@ -28,7 +28,7 @@ func ZapLogger() gin.HandlerFunc {
 		c.Next()
 
 		// 计算耗时
-		cost := time.Since(start).Nanoseconds()
+		cost := float64(time.Since(start).Nanoseconds()) / float64(time.Second)
 		ip := c.ClientIP()
 		userAgent := c.Request.UserAgent()
 		method := c.Request.Method
@@ -43,7 +43,7 @@ func ZapLogger() gin.HandlerFunc {
 			zap.Int("BodySize", bodySize),
 			zap.String("Path", path),
 			zap.String("Method", method),
-			zap.Int64("Cost", cost),
+			zap.Float64("Cost", cost),
 			zap.Int("Status", status),
 			zap.String("Query", query),
 			zap.String("errors", ErrorMessage))

@@ -11,7 +11,7 @@ import (
 
 func InitRouter(engine *gin.Engine, cfg *config.ServerConfig) {
 	// 公共静态文件映射
-	engine.StaticFS("/static", gin.Dir(filepath.Join(cfg.WorkDir, cfg.StaticDir), true))
+	engine.StaticFS(cfg.StaticDir, gin.Dir(filepath.Join(cfg.WorkDir, cfg.StaticDir), true))
 	// 获取版本号
 	httpRouterGroup := engine.Group(router.GinRouter.Version)
 	// 注册路由
@@ -24,8 +24,11 @@ func InitRouter(engine *gin.Engine, cfg *config.ServerConfig) {
 // @Param group gin.RouterGroup
 // @Param routeMap route.RouterMap
 // @Description: 注册接口路由
-func registerRouter(httpRouterGroup *gin.RouterGroup, r route.Router) {
-	for k, api := range r.InitRouter() {
+func registerRouter(httpRouterGroup *gin.RouterGroup, r *route.ApiGroup) {
+	if r.IsUrl {
+		httpRouterGroup = httpRouterGroup.Group(r.Path)
+	}
+	for k, api := range r.Router.InitRouter() {
 		if len(k) > 0 { // 如果接口路径为空，则跳过
 			httpMethod := ginutils.JudgeMethod(api.Method, httpRouterGroup)
 			if httpMethod != nil { // 如果http方法不存在，则跳过
@@ -46,12 +49,12 @@ func registerRouter(httpRouterGroup *gin.RouterGroup, r route.Router) {
 // @Param routerGroup route.RouterGroup
 // @Description: 注册路由分组
 func registerRouterGroup(httpRouterGroup *gin.RouterGroup, routerGroup route.RouterGroup) {
-	for path, group := range routerGroup.InitGroup() {
+	for _, group := range routerGroup.InitGroup() {
 		if group.Group != nil {
-			// gin路由组创建，如果路由组的path不为空，那么就需要额外创建一个gin路由组
+			// gin路由组创建，如果路由组为URL，就注册Gin路由组
 			var parent *gin.RouterGroup
-			if len(group.Path) > 0 {
-				parent = httpRouterGroup.Group(path)
+			if group.IsUrl {
+				parent = httpRouterGroup.Group(group.Path)
 			} else {
 				parent = httpRouterGroup
 			}
@@ -65,7 +68,7 @@ func registerRouterGroup(httpRouterGroup *gin.RouterGroup, routerGroup route.Rou
 			// 进入下一层
 			registerRouterGroup(parent, group.Group)
 		} else if group.Router != nil {
-			registerRouter(httpRouterGroup, group.Router)
+			registerRouter(httpRouterGroup, group)
 		}
 	}
 }

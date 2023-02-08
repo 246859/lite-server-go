@@ -17,13 +17,14 @@ type AppRouter struct {
 
 func (a AppRouter) InitGroup() route.RouterGroupMap {
 	return route.RouterGroupMap{
-		system.System: &route.ApiGroup{ // System部分路由
+		system.System: &route.ApiGroup{ // Private部分路由 需要jwt验证
 			Mds:   route.GeneralMiddleware(),
 			Group: system.SystemRouter{},
+			IsUrl: true,
 		},
-		public.Public: &route.ApiGroup{ // Public部分路由
-			Mds:   route.GeneralMiddleware(),
+		public.Public: &route.ApiGroup{ // Public部分路由 不需要jwt验证
 			Group: public.PublicRouter{},
+			IsUrl: true,
 		},
 	}
 }

@@ -5,13 +5,13 @@ server:
   port: 8080
   # 秒为单位
   # 读取整个请求的超时时间
-  readTimeout: 15
+  readTimeout: 10000
   # 写入响应体的超时时间
-  writeTimeout: 10
+  writeTimeout: 10000
   # 读取请求头的超时时间
-  readHeaderTimeout: 5
+  readHeaderTimeout: 10000
   # Keep-alive连接复用的超时时间
-  idleTimeout: 600
+  idleTimeout: 10000
   # Multipart最大内存 50MB
   multipartMemory: 52428800
   # 请求头最大大小 3MB
@@ -35,9 +35,13 @@ zap:
   # 日志输出到哪里 file | console | both
   writer: both
   logFile:
+    # 20MB
     maxSize: 20
+    # 备份次数
     backups: 5
+    # 压缩
     compress: true
+    # 输出
     output:
       - "./log/output.log"
 
@@ -71,5 +75,13 @@ jwt:
   issuer: lite-blog-server
   acExp: 2
   acAlo: 10
-  reExp: 24*5
+  reExp: 120
 
+# 邮件配置
+mail:
+  host: smtp.exmail.qq.com
+  port: 465
+  username: vegetable-programmer@halfiisland.com
+  password: Wyh246859
+  expire: 5
+  limit: 1
