@@ -1,13 +1,15 @@
 package service
 
 import (
-	"liteserver/service/public"
+	"liteserver/service/article"
+	"liteserver/service/mail"
 	"liteserver/service/system"
 )
 
 var AppService = new(ServiceGroup)
 
 type ServiceGroup struct {
-	system.SystemService
-	public.PublicService
+	system.System
+	mail.Mail
+	article.Article
 }

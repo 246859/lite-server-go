@@ -2,10 +2,11 @@ package middleware
 
 import (
 	"errors"
+	"liteserver/utils/response"
 	"net"
-	"net/http"
 	"net/http/httputil"
 	"os"
+	"reflect"
 	"strings"
 	"time"
 
@@ -96,9 +97,8 @@ func ZapCustomRecovery(logger *zap.Logger, handle gin.RecoveryFunc) gin.HandlerF
 				}
 
 				if brokenPipe {
-					// 如果连接已经死了，就不能再往里面写东西
-					c.Error(err.(error))
 					c.Abort()
+					c.Error(err.(error))
 				} else {
 					handle(c, err)
 				}
@@ -113,7 +113,23 @@ func ZapCustomRecovery(logger *zap.Logger, handle gin.RecoveryFunc) gin.HandlerF
 // @Date 2023-01-11 15:27:36
 // @Description: 默认的Zap Recovery
 func ZapRecovery() gin.HandlerFunc {
-	return ZapCustomRecovery(zap.L(), func(c *gin.Context, err any) {
-		c.AbortWithStatus(http.StatusInternalServerError)
-	})
+	return ZapCustomRecovery(zap.L(), RecoveryHandler)
+}
+
+func RecoveryHandler(c *gin.Context, err any) {
+	if err != nil {
+		value := reflect.ValueOf(err)
+		switch value.Kind() {
+		case reflect.String:
+			response.InternalErrorWithMsg(c, value.String())
+		case reflect.Interface:
+			if e, ok := err.(error); ok {
+				response.InternalErrorWithMsg(c, e.Error())
+			} else {
+				response.InternalError(c)
+			}
+		default:
+			response.InternalError(c)
+		}
+	}
 }

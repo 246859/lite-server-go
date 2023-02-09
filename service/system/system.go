@@ -1,4 +1,6 @@
 package system
 
-type SystemService struct {
+type System struct {
+	UserService
+	AuthenticationService
 }

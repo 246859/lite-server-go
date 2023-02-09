@@ -7,8 +7,10 @@ type BusinessCode = uint16
 
 // @Date: 2023-01-12 22:08:34
 const (
-	Success         = 2000
-	SuccessLogin    = 2001
+	Success = 2000
+	// SuccessLogin 登录成功
+	SuccessLogin = 2001
+	// SuccessRegister 注册成功
 	SuccessRegister = 2002
 	SuccessLogout   = 2003
 

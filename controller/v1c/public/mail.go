@@ -2,25 +2,27 @@ package public
 
 import (
 	"github.com/gin-gonic/gin"
+	v1 "liteserver/controller/v1c"
 	"liteserver/global"
-	"liteserver/service"
 	"liteserver/utils/mailutils"
 	"liteserver/utils/response"
 	"liteserver/utils/validateutils"
 	"time"
 )
 
-var mailService = service.AppService.MailService
-
-type Mail struct{}
+// Mail
+// @Date 2023-02-09 19:39:49
+// @Description: 公共邮件服务接口
+type Mail struct {
+}
 
 // SendAuthMail
 // @Date 2023-02-08 18:06:36
-// @Param mail string
+// @Param email string 邮箱
 // @Method http.MethodGet
 // @Description:
 func (m *Mail) SendAuthMail(ctx *gin.Context) {
-	to := ctx.Query("mail")
+	to := ctx.Query("email")
 	// 参数解析
 	if err := ctx.ShouldBind(to); err != nil {
 		response.FailWithMsg(ctx, global.I18nRawCN("request.badPrams"))
@@ -31,7 +33,7 @@ func (m *Mail) SendAuthMail(ctx *gin.Context) {
 		return
 	}
 	// 发送验证邮件
-	mail, err := mailService.SendAuthMail(to)
+	mail, err := v1.MailSevice.SendAuthMail(to)
 	if err != nil {
 		response.FailWithMsg(ctx, err.Error())
 		return

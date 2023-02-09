@@ -32,9 +32,9 @@ type ApiGroup struct {
 	Group RouterGroup
 }
 
-type RouterMap = map[string]*Api
+type RouterMap = map[string]Api
 
-type RouterGroupMap = map[string]*ApiGroup
+type RouterGroupMap = map[string]ApiGroup
 
 // RouterGroup
 // @Date 2023-01-16 21:40:22

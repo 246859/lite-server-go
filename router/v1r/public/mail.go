@@ -1,8 +1,8 @@
 package public
 
 import (
-	"liteserver/controller"
 	"liteserver/router/route"
+	"liteserver/router/v1r"
 	"net/http"
 )
 
@@ -11,13 +11,11 @@ const (
 	AuthMail = "authMail"
 )
 
-var mailApi = controller.ControllerGroup.Public.Mail
-
 type MailRouter struct {
 }
 
 func (m MailRouter) InitRouter() route.RouterMap {
 	return route.RouterMap{
-		AuthMail: &route.Api{Path: AuthMail, Method: http.MethodGet, Handler: mailApi.SendAuthMail},
+		AuthMail: route.Api{Path: AuthMail, Method: http.MethodGet, Handler: v1r.MailController.SendAuthMail},
 	}
 }

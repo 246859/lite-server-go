@@ -1,4 +1,4 @@
-package public
+package system
 
 import (
 	"context"
@@ -63,8 +63,13 @@ func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) 
 	if len(sysUser.Email) > 0 {
 		return errors.New(global.I18nRawCN("authen.userExist"))
 	}
+	if regiUser.Password != regiUser.RePassword {
+		return errors.New(global.I18nRawCN("authen.fail.notSamePasd"))
+	}
+	// 获取键值
+	redisKey := mailutils.RedisMailKey(regiUser.Email, regiUser.Ecode)
 	// 从Redis中拿验证码
-	code := global.Redis.Get(context.Background(), mailutils.RedisMailKey(regiUser.Email, mailutils.AuthMail)).Val()
+	code := global.Redis.Get(context.Background(), redisKey).Val()
 	// 如果验证码不正确
 	if code != regiUser.Ecode {
 		return errors.New(global.I18nRawCN("authem.fail.errcode"))
@@ -78,6 +83,8 @@ func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) 
 	if err := global.DB().Model(sysUser).Create(&sysUser).Error; err != nil {
 		return err
 	}
+	// 成功过后删除Redis中的key
+	global.Redis.Del(context.Background(), redisKey)
 	return nil
 }
 
@@ -100,7 +107,7 @@ func (a *AuthenticationService) ForgetPassword(fpgUser *sysreq.ForgetPassword) (
 		return errors.New(global.I18nRawCN("authen.userNotFound"))
 	}
 	// 如果验证码不相等
-	redisKey := mailutils.RedisMailKey(fpgUser.Email, mailutils.AuthMail)
+	redisKey := mailutils.RedisMailKey(fpgUser.Email, fpgUser.Ecode)
 	if global.Redis.Get(context.Background(), redisKey).Val() != fpgUser.Ecode {
 		return errors.New(global.I18nRawCN("authem.fail.errcode"))
 	}
@@ -108,5 +115,7 @@ func (a *AuthenticationService) ForgetPassword(fpgUser *sysreq.ForgetPassword) (
 	if err := global.DB().Model(sysUser).Update("password", fpgUser.Password).Error; err != nil {
 		return err
 	}
+	// 成功过后删除Redis中的key
+	global.Redis.Del(context.Background(), redisKey)
 	return nil
 }

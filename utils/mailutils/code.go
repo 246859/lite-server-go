@@ -4,5 +4,5 @@ const AuthMail = "authMail"
 const PasswordMail = "passwordMail"
 
 func RedisMailKey(emil string, key string) string {
-	return emil + key
+	return emil + "|mail|" + key
 }

@@ -62,6 +62,7 @@ func (m *MailClient) connect() error {
 	server.Username = m.MailCfg.Username
 	server.Password = m.MailCfg.Password
 	server.Encryption = mail.EncryptionSTARTTLS
+	server.KeepAlive = true
 
 	client, err := server.Connect()
 	if err != nil {

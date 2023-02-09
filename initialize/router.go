@@ -24,7 +24,7 @@ func InitRouter(engine *gin.Engine, cfg *config.ServerConfig) {
 // @Param group gin.RouterGroup
 // @Param routeMap route.RouterMap
 // @Description: 注册接口路由
-func registerRouter(httpRouterGroup *gin.RouterGroup, r *route.ApiGroup) {
+func registerRouter(httpRouterGroup *gin.RouterGroup, r route.ApiGroup) {
 	if r.IsUrl {
 		httpRouterGroup = httpRouterGroup.Group(r.Path)
 	}

@@ -2,8 +2,8 @@ package router
 
 import (
 	"liteserver/router/route"
-	"liteserver/router/v1/public"
-	"liteserver/router/v1/system"
+	"liteserver/router/v1r/public"
+	"liteserver/router/v1r/system"
 )
 
 // GinRouter
@@ -17,12 +17,12 @@ type AppRouter struct {
 
 func (a AppRouter) InitGroup() route.RouterGroupMap {
 	return route.RouterGroupMap{
-		system.System: &route.ApiGroup{ // Private部分路由 需要jwt验证
+		system.System: route.ApiGroup{ // Private部分路由 需要jwt验证
 			Mds:   route.GeneralMiddleware(),
 			Group: system.SystemRouter{},
 			IsUrl: true,
 		},
-		public.Public: &route.ApiGroup{ // Public部分路由 不需要jwt验证
+		public.Public: route.ApiGroup{ // Public部分路由 不需要jwt验证
 			Group: public.PublicRouter{},
 			IsUrl: true,
 		},

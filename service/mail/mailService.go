@@ -1,4 +1,4 @@
-package public
+package mail
 
 import (
 	"go.uber.org/zap/buffer"
