@@ -35,17 +35,17 @@ func (a Authentication) Login(c *gin.Context) {
 	}
 	// 调用login服务
 	token, err := authenService.Login(&login)
+	if err != nil {
+		response.FailWithMsg(c, err.Error())
+		return
+	}
 	// 将access token存入redis
 	if err := jwtService.SetJwtToRedis(c, token.Access, login.Email); err != nil {
 		response.InternalErrorWithMsg(c, err.Error())
 		return
 	}
 	// 返回结果
-	if err == nil {
-		response.OkWithParams(c, code.SuccessLogin, token, global.I18nRawCN("authen.ok.login"))
-	} else {
-		response.FailWithMsg(c, err.Error())
-	}
+	response.OkWithParams(c, code.SuccessLogin, token, global.I18nRawCN("authen.ok.login"))
 }
 
 // Register
