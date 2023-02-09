@@ -90,8 +90,10 @@ func (u *UniverseTranslator) ValidateStruct(obj any) error {
 // @Description: 结构体字段验证
 func (u *UniverseTranslator) validateStruct(obj any) error {
 	// 错误类型断言
-	errs := u.validator.Struct(obj).(validator.ValidationErrors)
-	return u.errorTranslate(errs)
+	if err := u.validator.Struct(obj); err != nil {
+		return u.errorTranslate(err.(validator.ValidationErrors))
+	}
+	return nil
 }
 
 // errorTranslate
