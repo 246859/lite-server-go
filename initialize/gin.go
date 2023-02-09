@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"liteserver/config"
 	"liteserver/middleware"
 	"net/http"
@@ -24,8 +25,12 @@ func newEngine(cfg *config.ServerConfig) *gin.Engine {
 // @Description: 安装Gin全局插件
 func installPlugins(engine *gin.Engine) {
 	engine.Use(
+		// 日志组件
 		middleware.ZapLogger(),
+		// 日志错误记录组件
 		middleware.ZapRecovery())
+	// 字段验证翻译器
+	binding.Validator = middleware.UniverseValidateTranslator()
 }
 
 // installRouter
