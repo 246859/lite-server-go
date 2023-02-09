@@ -6,12 +6,12 @@ import (
 	"liteserver/global"
 	"liteserver/global/code"
 	"liteserver/model/sys/sysreq"
-	"liteserver/utils/jwtutils"
 	"liteserver/utils/response"
 )
 
 // 仅仅为了兼容性而保留
 var authenService = v1.SystemService.AuthenticationService
+var jwtService = v1.SystemService.JwtService
 
 // Authentication
 // @Date 2023-01-16 16:04:04
@@ -35,9 +35,11 @@ func (a Authentication) Login(c *gin.Context) {
 	}
 	// 调用login服务
 	token, err := authenService.Login(&login)
-	// 将生成的Token存入Redis
-	global.Redis.Set(c, token.Access, login.Email, jwtutils.JwtCfg.AcExpTime())
-	global.Redis.Set(c, token.Refresh, login.Email, jwtutils.JwtCfg.ReExpTime())
+	// 将access token存入redis
+	if err := jwtService.SetJwtToRedis(c, token.Access, login.Email); err != nil {
+		response.InternalErrorWithMsg(c, err.Error())
+		return
+	}
 	// 返回结果
 	if err == nil {
 		response.OkWithParams(c, code.SuccessLogin, token, global.I18nRawCN("authen.ok.login"))

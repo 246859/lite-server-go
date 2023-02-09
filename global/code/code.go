@@ -26,7 +26,7 @@ const (
 	// AccessNoLogin 用户未登录
 	AccessNoLogin = 4031
 	// AccessNoPerm 没有访问权限
-	AccessNoPerm = 4032
-
+	AccessNoPerm  = 4032
+	TokenInvalid  = 4033
 	InternalError = 5000
 )

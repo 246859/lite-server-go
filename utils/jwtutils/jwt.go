@@ -1,6 +1,7 @@
 package jwtutils
 
 import (
+	"errors"
 	"github.com/golang-jwt/jwt/v4"
 	"liteserver/config"
 	"liteserver/utils/uuidtool"
@@ -9,6 +10,10 @@ import (
 
 const UserClaimsFlag = "userClaims"
 const UserJwtPayload = "userPayload"
+
+var (
+	ErrJwtNeedToRefresh = errors.New("token需要刷新")
+)
 
 var JwtCfg *config.JwtConfig
 
