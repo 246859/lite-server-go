@@ -5,12 +5,46 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"liteserver/global"
+	"liteserver/model/sys/sysrep"
 	"liteserver/utils/jwtutils"
 	"strings"
 	"time"
 )
 
 type JwtService struct {
+}
+
+// CreateTokenPair
+// @Date 2023-02-10 15:48:13
+// @Param user sysrep.SystemUser
+// @Return sysrep.Jwt
+// @Return error
+// @Method
+// @Description: 根据用户信息创建一对token
+func (j JwtService) CreateTokenPair(user sysrep.SystemUser) (*sysrep.Jwt, error) {
+	// 根据用户信息创建Claims
+	userClaims := jwtutils.UserClaims{UserId: user.ID, UserUUID: user.Uuid}
+
+	// 创建Refresh Claims
+	refreshClaims := jwtutils.CreateJwtClaims(userClaims, jwtutils.JwtCfg.Issuer, jwtutils.JwtCfg.ReExpTime())
+	// 创建Access Claims，将refreshClaims的jti作为accessClaims的issuer
+	accessClaims := jwtutils.CreateJwtClaims(userClaims, refreshClaims.ID, jwtutils.JwtCfg.AcExpTime())
+
+	// refresh token
+	refreshToken, err := jwtutils.CreateHs256Jwt(refreshClaims, jwtutils.JwtCfg.ReSign)
+	if err != nil {
+		return nil, err
+	}
+	// access token
+	accessToken, err := jwtutils.CreateHs256Jwt(accessClaims, jwtutils.JwtCfg.AcSign)
+	if err != nil {
+		return nil, err
+	}
+
+	return &sysrep.Jwt{
+		Access:  accessToken,
+		Refresh: refreshToken,
+	}, nil
 }
 
 // BearerTokenFromHeader
@@ -23,20 +57,20 @@ type JwtService struct {
 func (j JwtService) BearerTokenFromHeader(c *gin.Context) (string, error) {
 	header := c.Request.Header.Get("Authorization")
 	if len(header) == 0 {
-		return "", errors.New("access-token不存在")
+		return "", errors.New(global.I18nRawCN("token.invalid"))
 	}
 
 	bearerToken := strings.Split(header, " ")
 	if len(bearerToken) < 2 {
-		return "", errors.New("access-token不存在")
+		return "", errors.New(global.I18nRawCN("token.invalid"))
 	}
 
 	if bearerToken[0] != "Bearer" {
-		return "", errors.New("不是Bearer类型Token")
+		return "", errors.New(global.I18nRawCN("token.invalidType"))
 	}
 
 	if len(bearerToken[1]) == 0 {
-		return "", errors.New("token不存在")
+		return "", errors.New(global.I18nRawCN("token.invalid"))
 	}
 
 	return bearerToken[1], nil
@@ -96,17 +130,64 @@ func (j JwtService) ParseRefreshToken(token string) (jwtutils.Claims, error) {
 	return j.ParseHs256Token(token, jwtutils.JwtCfg.ReSign)
 }
 
+// ParseHs256Token
+// @Date 2023-02-10 16:22:46
+// @Param token string
+// @Param sign string
+// @Return jwtutils.Claims
+// @Return error
+// @Description: 解析Hs256加密的token
 func (j JwtService) ParseHs256Token(token string, sign string) (jwtutils.Claims, error) {
 	claims, err := jwtutils.ParseHs256Jwt(token, sign)
-	// 如果过期了分两种情况，完全过期和还在允许时间内
-	if errors.Is(err, jwt.ErrTokenExpired) {
-		// 如果依旧在过期时间内
-		if time.Now().Sub(claims.ExpiresAt.Time.Add(jwtutils.JwtCfg.AcAllowExpTime())) <= 0 {
-			return claims, jwtutils.ErrJwtNeedToRefresh
+	switch sign {
+	case jwtutils.JwtCfg.AcSign:
+		if errors.Is(err, jwt.ErrTokenExpired) {
+			// 如果依旧在过期时间内
+			if time.Now().Sub(claims.ExpiresAt.Time.Add(jwtutils.JwtCfg.AcAllowExpTime())) <= 0 {
+				return claims, jwtutils.ErrJwtNeedToRefresh
+			}
+		}
+	case jwtutils.JwtCfg.ReSign:
+		if err != nil {
+			return claims, err
 		}
 	}
 	if err != nil {
 		return claims, err
 	}
 	return claims, nil
+}
+
+// TokenRefresh
+// @Date 2023-02-10 15:32:28
+// @Return sysrep.Jwt
+// @Return error
+// @Description: Token刷新服务
+func (j JwtService) TokenRefresh(token sysrep.Jwt) (*sysrep.Jwt, error) {
+	accessClaims, err := j.ParseAccessToken(token.Access)
+	// 只有access处于需要刷新的状态才有必要刷新token
+	if err != nil && !errors.Is(err, jwtutils.ErrJwtNeedToRefresh) {
+		return nil, err
+	}
+	refreshClaims, err := j.ParseRefreshToken(token.Refresh)
+	if err != nil {
+		return nil, err
+	}
+
+	// 对比accessClaims的签发者，如果不是refreshClaims的jti，则说明这一对token没有任何关系
+	if accessClaims.Issuer != refreshClaims.ID {
+		return nil, errors.New(global.I18nRawCN("token.invalidPair"))
+	}
+
+	// 走到这一步说明token合法，两个token也是对应的，可以颁发新的accessToken
+	newAccessClaims := jwtutils.CreateJwtClaims(refreshClaims.UserClaims, refreshClaims.ID, jwtutils.JwtCfg.AcExpTime())
+	// 创建新的AccessToken
+	newAccessToken, err := jwtutils.CreateHs256Jwt(newAccessClaims, jwtutils.JwtCfg.AcSign)
+	if err != nil {
+		return nil, err
+	}
+	return &sysrep.Jwt{
+		Access:  newAccessToken,
+		Refresh: token.Refresh,
+	}, nil
 }

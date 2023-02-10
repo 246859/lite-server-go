@@ -1,15 +1,17 @@
 package public
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	v1 "liteserver/controller/v1c"
 	"liteserver/global"
 	"liteserver/global/code"
+	"liteserver/model/sys/sysrep"
 	"liteserver/model/sys/sysreq"
 	"liteserver/utils/response"
 )
 
-// 仅仅为了兼容性而保留
 var authenService = v1.SystemService.AuthenticationService
 var jwtService = v1.SystemService.JwtService
 
@@ -93,7 +95,26 @@ func (a Authentication) ForgetPassword(c *gin.Context) {
 // RefreshToken
 // @Date 2023-01-16 16:09:00
 // @Param c *gin.Context
+// @Method http.MethodGet
 // @Description: Token刷新接口
 func (a Authentication) RefreshToken(c *gin.Context) {
-
+	var oldJwt sysrep.Jwt
+	// 先解析参数
+	if err := c.ShouldBind(&oldJwt); err != nil {
+		response.FailWithMsg(c, err.Error())
+		return
+	}
+	// 随后调用服务
+	token, err := jwtService.TokenRefresh(oldJwt)
+	if err != nil {
+		switch {
+		case errors.Is(err, jwt.ErrTokenExpired):
+			response.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("token.expired"))
+		default:
+			response.FailWithMsg(c, err.Error())
+		}
+		return
+	}
+	// 返回新的token
+	response.OkWithParams(c, code.SuccessRefresh, token, global.I18nRawCN("token.refreshOk"))
 }

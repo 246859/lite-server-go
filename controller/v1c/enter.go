@@ -1,6 +1,8 @@
 package v1c
 
-import "liteserver/service"
+import (
+	"liteserver/service"
+)
 
 var (
 	Service = service.AppService

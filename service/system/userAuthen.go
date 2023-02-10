@@ -6,7 +6,6 @@ import (
 	"liteserver/global"
 	"liteserver/model/sys/sysrep"
 	"liteserver/model/sys/sysreq"
-	"liteserver/utils/jwtutils"
 	"liteserver/utils/mailutils"
 	"liteserver/utils/uuidtool"
 )
@@ -20,7 +19,7 @@ type AuthenticationService struct{}
 // @Return err error
 // @Description: 登录服务
 func (a *AuthenticationService) Login(loginuser *sysreq.Login) (userInfo *sysrep.Jwt, err error) {
-	var sysUser *sysrep.SystemUser
+	var sysUser sysrep.SystemUser
 	// 查询数据库中是否含有该对象
 	global.DB().Model(sysrep.SystemUser{}).Where("email = ?", loginuser.Email).First(&sysUser)
 	// 如果用户不存在
@@ -32,22 +31,13 @@ func (a *AuthenticationService) Login(loginuser *sysreq.Login) (userInfo *sysrep
 		return nil, errors.New(global.I18nRawCN("authen.passwordError"))
 	}
 
-	// 创建Claims
-	claims := jwtutils.UserClaims{UserId: sysUser.ID, UserUUID: sysUser.Uuid}
-	//生成Access token
-	access, err := jwtutils.CreateAccessToken(claims)
+	// 创建token对
+	token, err := new(JwtService).CreateTokenPair(sysUser)
+
 	if err != nil {
-		return nil, errors.New("access-token创建失败")
+		return nil, err
 	}
-	// 生成RefreshToken
-	refresh, err := jwtutils.CreateRefreshToken(claims)
-	if err != nil {
-		return nil, errors.New("refresh创建失败")
-	}
-	return &sysrep.Jwt{
-		Access:  access,
-		Refresh: refresh,
-	}, nil
+	return token, nil
 }
 
 // Register

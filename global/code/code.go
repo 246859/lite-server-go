@@ -3,7 +3,7 @@ package code
 // BusinessCode
 // @Date: 2023-01-12 22:09:36
 // 业务码，非负整数
-type BusinessCode = uint16
+type BusinessCode = uint32
 
 // @Date: 2023-01-12 22:08:34
 const (
@@ -13,6 +13,7 @@ const (
 	// SuccessRegister 注册成功
 	SuccessRegister = 2002
 	SuccessLogout   = 2003
+	SuccessRefresh  = 2004
 
 	BadOperation = 4000
 	// UnAuthorized 未授权

@@ -16,8 +16,3 @@ type SystemUser struct {
 	Email    string `gorm:"comment:用户邮箱;" json:"email" label:"用户邮箱"`
 	Enable   bool   `gorm:"comment:用户是否启用;" json:"enable" label:"是否启用"`
 }
-
-type Jwt struct {
-	Access  string `json:"access"`
-	Refresh string `json:"refresh"`
-}

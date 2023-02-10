@@ -99,6 +99,10 @@ func Fail(c *gin.Context) {
 	NewResponse(c, http.StatusBadRequest, code.BadOperation, nil, "")
 }
 
+func BadParams(c *gin.Context) {
+	NewResponse(c, http.StatusBadRequest, code.BadOperation, nil, global.I18nRawCN("request.badPrams"))
+}
+
 func FailWithMsg(c *gin.Context, msg string) {
 	NewResponse(c, http.StatusBadRequest, code.BadOperation, nil, msg)
 }
