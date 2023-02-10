@@ -25,6 +25,9 @@ func ZapLogger() gin.HandlerFunc {
 		path := c.Request.URL.Path
 		query := c.Request.URL.RawQuery
 
+		// 包装一下 gin.ResponseWriter
+		responseWriterWrapper := NewResponseWriterWrapper(c)
+		c.Writer = responseWriterWrapper
 		// 处理
 		c.Next()
 
@@ -36,18 +39,20 @@ func ZapLogger() gin.HandlerFunc {
 		status := c.Writer.Status()
 		ErrorMessage := c.Errors.ByType(gin.ErrorTypePrivate).String()
 		bodySize := c.Writer.Size()
+		responseContent := responseWriterWrapper.String()
 
 		// 日志输出
 		zap.L().Info("[Gin] HttpRequest",
+			zap.String("Method", method),
+			zap.Int("Status", status),
+			zap.String("Path", path),
+			zap.String("Query", query),
+			zap.Float64("Cost", cost),
+			zap.Int("BodySize", bodySize),
 			zap.String("Ip", ip),
 			zap.String("User-Agent", userAgent),
-			zap.Int("BodySize", bodySize),
-			zap.String("Path", path),
-			zap.String("Method", method),
-			zap.Float64("Cost", cost),
-			zap.Int("Status", status),
-			zap.String("Query", query),
-			zap.String("errors", ErrorMessage))
+			zap.String("errors", ErrorMessage),
+			zap.String("response-content", responseContent))
 	}
 }
 
