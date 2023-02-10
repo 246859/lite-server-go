@@ -1,11 +1,15 @@
 package initialize
 
 import (
+	cache "github.com/chenyahui/gin-cache"
+	"github.com/chenyahui/gin-cache/persist"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/go-redis/redis/v8"
 	"liteserver/config"
 	"liteserver/middleware"
 	"net/http"
+	"time"
 )
 
 // newEngine
@@ -23,12 +27,17 @@ func newEngine(cfg *config.ServerConfig) *gin.Engine {
 // @Date 2023-01-11 16:35:02
 // @Param engine *gin.Engine
 // @Description: 安装Gin全局插件
-func installPlugins(engine *gin.Engine) {
+func installPlugins(engine *gin.Engine, cfg *config.ServerConfig, redisClient *redis.Client) {
 	engine.Use(
+		// 限流中间件
+		middleware.NewRateLimitMiddleware(cfg.Rate, cfg.Limit),
 		// 日志组件
 		middleware.ZapLogger(),
 		// 日志错误记录组件
-		middleware.ZapRecovery())
+		middleware.ZapRecovery(),
+		// 缓存中间件
+		cache.CacheByRequestURI(persist.NewRedisStore(redisClient), time.Duration(cfg.Cache)*time.Second))
+
 	// 字段验证翻译器
 	binding.Validator = middleware.UniverseValidateTranslator()
 }
@@ -62,9 +71,9 @@ func configHttpServer(engine *gin.Engine, cfg *config.ServerConfig) *http.Server
 	return server
 }
 
-func InitHttpServer(cfg *config.ServerConfig) *http.Server {
+func InitHttpServer(cfg *config.ServerConfig, client *redis.Client) *http.Server {
 	engine := newEngine(cfg)
-	installPlugins(engine)
+	installPlugins(engine, cfg, client)
 	installRouter(engine, cfg)
 	return configHttpServer(engine, cfg)
 }

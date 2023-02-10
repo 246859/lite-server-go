@@ -23,6 +23,19 @@ type ServerConfig struct {
 	// @Description: 运行模式 debug||test||release
 	Mode string `yaml:"mode"`
 
+	// Limit
+	// @Date 2023-02-10 20:36:19
+	// @Description: QPS最大值
+	Limit int64 `yaml:"limit"`
+	// Rate
+	// @Date 2023-02-10 20:35:38
+	// @Description: 令牌每秒放入令牌的比例
+	Rate float64 `yaml:"rate"`
+
+	// Cache
+	// @Date 2023-02-10 21:25:38
+	// @Description: 缓存时间
+	Cache int64 `yaml:"cache"`
 	// ReadTimeout
 	// @Date 2023-01-11 16:55:10
 	// @Description: http请求读取超时时间

@@ -93,7 +93,7 @@ func (s *Server) loadEnv() error {
 	// 设置工作目录
 	global.Config.ServerConfig.WorkDir = global.WorkDir
 	// 初始化Http服务器
-	s.server = initialize.InitHttpServer(global.Config.ServerConfig)
+	s.server = initialize.InitHttpServer(global.Config.ServerConfig, global.Redis)
 	return nil
 }
 
