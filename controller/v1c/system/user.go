@@ -2,7 +2,9 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"liteserver/controller/v1c"
 	"liteserver/global"
+	"liteserver/model/sys/sysrep"
 	"liteserver/utils/jwtutils"
 	"liteserver/utils/response"
 )
@@ -58,8 +60,8 @@ func (u UserController) Logout(ctx *gin.Context) {
 	// 从Redis中获取token
 	value, exists := ctx.Get(jwtutils.UserJwtPayload)
 	// 删除Redis值
-	if v, ok := value.(string); ok && exists {
-		if global.Redis.Del(ctx, v).Val() == 0 {
+	if jwtObj, ok := value.(sysrep.Jwt); ok && exists {
+		if v1c.SystemService.JwtService.DelRedisAccessToken(jwtObj.Access) != nil {
 			fail = true
 		}
 	} else {

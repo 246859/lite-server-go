@@ -17,7 +17,7 @@ type JwtConfig struct {
 // @Method
 // @Description: access-token 过期时间
 func (j *JwtConfig) AcExpTime() time.Duration {
-	return time.Hour * time.Duration(j.AcExp)
+	return time.Minute * time.Duration(j.AcExp)
 }
 
 // AcAllowExpTime
@@ -26,7 +26,7 @@ func (j *JwtConfig) AcExpTime() time.Duration {
 // @Method
 // @Description: 允许过期时间
 func (j *JwtConfig) AcAllowExpTime() time.Duration {
-	return time.Minute * time.Duration(j.ReExp)
+	return time.Minute * time.Duration(j.AcAlo)
 }
 
 // ReExpTime
@@ -35,5 +35,5 @@ func (j *JwtConfig) AcAllowExpTime() time.Duration {
 // @Method
 // @Description: refresh-token 过期时间
 func (j *JwtConfig) ReExpTime() time.Duration {
-	return time.Hour * time.Duration(j.ReExp)
+	return time.Minute * time.Duration(j.ReExp)
 }

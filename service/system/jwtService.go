@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -99,6 +100,16 @@ func (j JwtService) SetJwtToRedis(c *gin.Context, jwt string, val string) error 
 		return err
 	}
 	return nil
+}
+
+// DelRedisAccessToken
+// @Date 2023-02-10 18:01:19
+// @Param jwt string
+// @Return error
+// @Method
+// @Description: 删除Redis中的AccessToken
+func (j JwtService) DelRedisAccessToken(jwt string) error {
+	return global.Redis.Del(context.Background(), j.CreateRedisAccessKey(jwt)).Err()
 }
 
 // CreateRedisAccessKey

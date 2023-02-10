@@ -78,11 +78,12 @@ func ParseHs256Jwt(jwtStr string, secret string) (Claims, error) {
 		return []byte(secret), nil
 	}, jwt.WithValidMethods([]string{"HS256"}), jwt.WithJSONNumber())
 
+	var c Claims
 	if token != nil {
-		if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-			return *claims, nil
+		if claims, ok := token.Claims.(*Claims); ok {
+			c = *claims
 		}
 	}
 
-	return Claims{}, err
+	return c, err
 }
