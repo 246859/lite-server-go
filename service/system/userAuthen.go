@@ -6,6 +6,7 @@ import (
 	"liteserver/global"
 	"liteserver/model/sys/sysrep"
 	"liteserver/model/sys/sysreq"
+	"liteserver/utils/ginutils"
 	"liteserver/utils/mailutils"
 	"liteserver/utils/uuidtool"
 )
@@ -27,7 +28,7 @@ func (a *AuthenticationService) Login(loginuser *sysreq.Login) (userInfo *sysrep
 		return nil, errors.New(global.I18nRawCN("authen.userNotFound"))
 	}
 	// 验证密码是否相等
-	if sysUser.Password != loginuser.Password {
+	if sysUser.Password != ginutils.Sha1(loginuser.Password) {
 		return nil, errors.New(global.I18nRawCN("authen.passwordError"))
 	}
 
@@ -68,7 +69,7 @@ func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) 
 	sysUser.Nickname = regiUser.Nickname
 	sysUser.Uuid = uuidtool.NewUUIDv5()
 	sysUser.Email = regiUser.Email
-	sysUser.Password = regiUser.RePassword
+	sysUser.Password = ginutils.Sha1(regiUser.RePassword)
 	// 插入数据库
 	if err := global.DB().Model(sysUser).Create(&sysUser).Error; err != nil {
 		return err

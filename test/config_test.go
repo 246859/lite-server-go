@@ -1,6 +1,8 @@
 package test
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -34,4 +36,10 @@ func TestDefaultConfig(t *testing.T) {
 	dist, err := os.Create("./config2.yml")
 	fmt.Println(err)
 	fmt.Println(io.Copy(dist, temp))
+}
+
+func TestEncode(t *testing.T) {
+	hash := sha1.New()
+	hash.Write([]byte("hello"))
+	fmt.Println(hex.EncodeToString(hash.Sum(nil)))
 }
