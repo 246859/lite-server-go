@@ -94,9 +94,9 @@ func (j JwtService) CheckJwtFromRedis(c *gin.Context, jwt string) bool {
 // @Param jwt string
 // @Method
 // @Description: 将Jwt存入Redis中
-func (j JwtService) SetJwtToRedis(c *gin.Context, jwt string, val string) error {
+func (j JwtService) SetJwtToRedis(jwt string, val string) error {
 	// redis过期时间是exptime+allowtime
-	if err := global.Redis.Set(c, j.CreateRedisAccessKey(jwt), val, jwtutils.JwtCfg.AcExpTime()+jwtutils.JwtCfg.AcAllowExpTime()).Err(); err != nil {
+	if err := global.Redis.Set(context.Background(), j.CreateRedisAccessKey(jwt), val, jwtutils.JwtCfg.AcExpTime()+jwtutils.JwtCfg.AcAllowExpTime()).Err(); err != nil {
 		return err
 	}
 	return nil
@@ -195,6 +195,10 @@ func (j JwtService) TokenRefresh(token sysrep.Jwt) (*sysrep.Jwt, error) {
 	// 创建新的AccessToken
 	newAccessToken, err := jwtutils.CreateHs256Jwt(newAccessClaims, jwtutils.JwtCfg.AcSign)
 	if err != nil {
+		return nil, err
+	}
+	// 存入Redis
+	if err := j.SetJwtToRedis(newAccessToken, refreshClaims.UserUUID); err != nil {
 		return nil, err
 	}
 	return &sysrep.Jwt{

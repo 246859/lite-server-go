@@ -42,7 +42,7 @@ func (a Authentication) Login(c *gin.Context) {
 		return
 	}
 	// 将access token存入redis
-	if err := jwtService.SetJwtToRedis(c, token.Access, login.Email); err != nil {
+	if err := jwtService.SetJwtToRedis(token.Access, login.Email); err != nil {
 		response.InternalErrorWithMsg(c, err.Error())
 		return
 	}
