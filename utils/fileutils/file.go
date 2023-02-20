@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 // IsExist
@@ -80,4 +81,53 @@ func JoinPath(path string) string {
 		return path
 	}
 	return filepath.Join(GetCurrentPath(), path)
+}
+
+// FileSuffix
+// @Date 2023-02-20 14:55:19
+// @Param file string
+// @Return string
+// @Description: 获取一个文件的后缀
+func FileSuffix(file string) string {
+	_, fp := filepath.Split(file)
+	return fp[strings.Index(fp, ".")+1:]
+}
+
+// CreateFile
+// @Date 2023-02-20 15:36:23
+// @Description: 根据路径创建一个文件，如果文件夹不存在，则先创建文件夹，再创建文件
+func CreateFile(path string) error {
+	dir, file := filepath.Split(path)
+	// 创建目录
+	if err := CreateDir(dir); err == nil {
+		if _, err := os.Create(file); err != nil {
+			return err
+		} else {
+			return nil
+		}
+	} else {
+		return err
+	}
+}
+
+// CreateDir
+// @Date 2023-02-20 15:42:10
+// @Param dir string
+// @Return error
+// @Method
+// @Description: 创建一个文件夹，如果文件夹已存在则不会返回错误
+func CreateDir(path string) error {
+	dir, _ := filepath.Split(path)
+	if err := os.Mkdir(dir, os.ModeDir); os.IsExist(err) || err == nil {
+		return nil
+	} else {
+		return err
+	}
+}
+
+// ToForwardSlash
+// @Date 2023-02-20 16:09:25
+// @Description: 路径正斜杠
+func ToForwardSlash(path string) string {
+	return strings.ReplaceAll(path, `\`, `/`)
 }

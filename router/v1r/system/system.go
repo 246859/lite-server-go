@@ -17,5 +17,6 @@ func (s SystemRouter) InitGroup() route.RouterGroupMap {
 		User:          route.ApiGroup{Path: User, IsUrl: true, Router: UserSystemRouter{}},
 		Article:       route.ApiGroup{Path: Article, IsUrl: true, Router: ArticleSystemRouter{}},
 		Authorization: route.ApiGroup{Path: Authorization, IsUrl: true, Router: AuthorizationRouter{}},
+		File:          route.ApiGroup{Path: File, IsUrl: true, Router: FileRouter{}},
 	}
 }

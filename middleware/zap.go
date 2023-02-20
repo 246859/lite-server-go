@@ -40,6 +40,10 @@ func ZapLogger() gin.HandlerFunc {
 		ErrorMessage := c.Errors.ByType(gin.ErrorTypePrivate).String()
 		bodySize := c.Writer.Size()
 		responseContent := responseWriterWrapper.String()
+		// 长度过大则不打印
+		if len(responseContent) >= 300 {
+			responseContent = "response length >= 300"
+		}
 
 		// 日志输出
 		zap.L().Info("[Gin] HttpRequest",

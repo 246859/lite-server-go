@@ -1,6 +1,13 @@
 package system
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"liteserver/controller/v1c"
+	"liteserver/model/article"
+	"liteserver/utils/jwtutils"
+	"liteserver/utils/response"
+	"strconv"
+)
 
 // ArticleModifyController
 // @Date 2023-02-09 20:05:03
@@ -11,17 +18,61 @@ type ArticleModifyController struct {
 // DeleteArticle
 // @Date 2023-02-09 20:05:50
 // @Param ctx *gin.Context
-// @Method
-// @Description: 删除文章
+// @Method http.MethodDelete
+// @Description: 删除文章接口
 func (a ArticleModifyController) DeleteArticle(ctx *gin.Context) {
+	articleId := ctx.Param("articleId")
+	ints, err := strconv.Atoi(articleId)
+	if err != nil || ints < 0 {
+		response.FailWithMsg(ctx, "非法的文章ID")
+		return
+	}
 
+	if err := v1c.ArticleService.DeleteArticle(ints); err != nil {
+		response.FailWithMsg(ctx, err.Error())
+	} else {
+		response.OkWithMsg(ctx, "文章删除成功")
+	}
 }
 
 // UpdateArticle
-// @Date 2023-02-09 20:06:54
+// @Date 2023-02-20 18:21:48
 // @Param ctx *gin.Context
-// @Method
-// @Description: 文章修改接口
+// @Method http.MethodPost
+// @Description: 更新文章接口
 func (a ArticleModifyController) UpdateArticle(ctx *gin.Context) {
+	var articleInfo article.Article
+	if err := ctx.ShouldBindUri(&articleInfo); err != nil {
+		response.FailWithMsg(ctx, err.Error())
+		return
+	}
+	if err := v1c.ArticleService.UpdateArticle(&articleInfo); err != nil {
+		response.FailWithMsg(ctx, err.Error())
+	} else {
+		response.OkWithMsg(ctx, "文章更新成功")
+	}
+}
 
+// CreateArticle
+// @Date 2023-02-20 18:25:25
+// @Param ctx *gin.Context
+// @Method http.MethodPost
+// @Description: 创建文章接口
+func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
+	var articleInfo article.Article
+	if err := ctx.ShouldBind(&articleInfo); err != nil {
+		response.FailWithMsg(ctx, err.Error())
+		return
+	}
+	claims, err := jwtutils.ToJwtClaims(ctx)
+	if err != nil {
+		response.FailWithMsg(ctx, err.Error())
+		return
+	}
+
+	if err := v1c.ArticleService.CreateArticle(&articleInfo, claims.UserClaims); err != nil {
+		response.FailWithMsg(ctx, err.Error())
+	} else {
+		response.OkWithMsg(ctx, "文章创建成功")
+	}
 }

@@ -12,4 +12,6 @@ var (
 	MailSevice     = Service.Mail
 	SystemService  = Service.System
 	ArticleService = Service.Article
+
+	FileService = Service.File
 )

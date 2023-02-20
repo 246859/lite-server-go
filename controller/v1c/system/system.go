@@ -5,4 +5,5 @@ type SystemGroup struct {
 	Authorization
 	ArticleModifyController
 	UserController
+	FileController
 }

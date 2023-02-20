@@ -6,14 +6,15 @@ import (
 	"liteserver/router"
 	"liteserver/router/route"
 	"liteserver/utils/ginutils"
+	"path"
 	"path/filepath"
 )
 
 func InitRouter(engine *gin.Engine, cfg *config.ServerConfig) {
-	// 公共静态文件映射
-	engine.StaticFS(cfg.StaticDir, gin.Dir(filepath.Join(cfg.WorkDir, cfg.StaticDir), true))
 	// 获取版本号
 	httpRouterGroup := engine.Group(router.GinRouter.Version)
+	// 公共静态文件映射
+	engine.StaticFS(path.Join(router.GinRouter.Version, cfg.StaticDir), gin.Dir(filepath.Join(cfg.WorkDir, cfg.StaticDir), true))
 	// 注册路由
 	registerRouterGroup(httpRouterGroup, router.GinRouter)
 

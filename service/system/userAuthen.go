@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"liteserver/global"
+	"liteserver/model/sys"
 	"liteserver/model/sys/sysrep"
 	"liteserver/model/sys/sysreq"
 	"liteserver/utils/ginutils"
@@ -20,9 +21,9 @@ type AuthenticationService struct{}
 // @Return err error
 // @Description: 登录服务
 func (a *AuthenticationService) Login(loginuser *sysreq.Login) (userInfo *sysrep.Jwt, err error) {
-	var sysUser sysrep.SystemUser
+	var sysUser sys.SystemUser
 	// 查询数据库中是否含有该对象
-	global.DB().Model(sysrep.SystemUser{}).Where("email = ?", loginuser.Email).First(&sysUser)
+	global.DB().Model(sys.SystemUser{}).Where("email = ?", loginuser.Email).First(&sysUser)
 	// 如果用户不存在
 	if len(sysUser.Email) == 0 {
 		return nil, errors.New(global.I18nRawCN("authen.userNotFound"))
@@ -47,7 +48,7 @@ func (a *AuthenticationService) Login(loginuser *sysreq.Login) (userInfo *sysrep
 // @Return err error
 // @Description: 注册服务
 func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) {
-	var sysUser sysrep.SystemUser
+	var sysUser sys.SystemUser
 	// 查询是否已存在该用户
 	global.DB().Model(sysUser).Where("email=?", regiUser.Email).First(&sysUser)
 	// 如果用户已经存在
@@ -60,11 +61,12 @@ func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) 
 	// 获取键值
 	redisKey := mailutils.RedisMailKey(regiUser.Email, regiUser.Ecode)
 	// 从Redis中拿验证码
-	code := global.Redis.Get(context.Background(), redisKey).Val()
+	val := global.Redis.Del(context.Background(), redisKey).Val()
 	// 如果验证码不正确
-	if code != regiUser.Ecode {
+	if val == 0 {
 		return errors.New(global.I18nRawCN("authem.fail.errcode"))
 	}
+
 	// 复制属性
 	sysUser.Nickname = regiUser.Nickname
 	sysUser.Uuid = uuidtool.NewUUIDv5()
@@ -79,7 +81,7 @@ func (a *AuthenticationService) Register(regiUser *sysreq.Register) (err error) 
 	return nil
 }
 
-func (a *AuthenticationService) ChangePassword(user *sysrep.SystemUser) (err error) {
+func (a *AuthenticationService) ChangePassword(user *sys.SystemUser) (err error) {
 	return nil
 }
 
@@ -90,7 +92,7 @@ func (a *AuthenticationService) ChangePassword(user *sysrep.SystemUser) (err err
 // @Method
 // @Description: 忘记密码服务
 func (a *AuthenticationService) ForgetPassword(fpgUser *sysreq.ForgetPassword) (err error) {
-	var sysUser sysrep.SystemUser
+	var sysUser sys.SystemUser
 	// 首先根据邮箱查找用户
 	global.DB().Model(sysUser).Where("email=?", fpgUser.Email).First(&sysUser)
 	// 如果用户不存在，那么就返回错误
@@ -99,11 +101,11 @@ func (a *AuthenticationService) ForgetPassword(fpgUser *sysreq.ForgetPassword) (
 	}
 	// 如果验证码不相等
 	redisKey := mailutils.RedisMailKey(fpgUser.Email, fpgUser.Ecode)
-	if global.Redis.Get(context.Background(), redisKey).Val() != fpgUser.Ecode {
+	if global.Redis.Del(context.Background(), redisKey).Val() == 0 {
 		return errors.New(global.I18nRawCN("authem.fail.errcode"))
 	}
 	// 最后修改密码
-	if err := global.DB().Model(sysUser).Update("password", fpgUser.Password).Error; err != nil {
+	if err := global.DB().Model(sysUser).Update("password", ginutils.Sha1(fpgUser.Password)).Error; err != nil {
 		return err
 	}
 	// 成功过后删除Redis中的key

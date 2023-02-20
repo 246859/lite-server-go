@@ -32,4 +32,6 @@ var (
 	UserController = SystemController.UserController
 	// AuthorizationController 授权接口
 	AuthorizationController = SystemController.Authorization
+
+	FileController = SystemController.FileController
 )

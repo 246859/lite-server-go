@@ -30,6 +30,10 @@ func DB() *gorm.DB {
 	return nil
 }
 
+func Model(ele any) *gorm.DB {
+	return DB().Model(ele)
+}
+
 // I18nRaw
 // @Date 2023-02-06 21:58:50
 // @Param key string

@@ -2,6 +2,7 @@ package jwtutils
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"liteserver/config"
 	"liteserver/utils/uuidtool"
@@ -27,6 +28,17 @@ func SetConfig(cfg *config.JwtConfig) {
 type Claims struct {
 	UserClaims
 	jwt.RegisteredClaims
+}
+
+func ToJwtClaims(ctx *gin.Context) (*Claims, error) {
+	value, exists := ctx.Get(UserClaimsFlag)
+	if !exists {
+		return nil, errors.New("缺失用户信息")
+	} else if claims, ok := value.(Claims); ok {
+		return &claims, nil
+	} else {
+		return nil, errors.New("错误的用户信息类型")
+	}
 }
 
 type UserClaims struct {

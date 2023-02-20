@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"liteserver/global"
+	"liteserver/model/sys"
 	"liteserver/model/sys/sysrep"
 	"liteserver/utils/jwtutils"
 	"strings"
@@ -22,7 +23,7 @@ type JwtService struct {
 // @Return error
 // @Method
 // @Description: 根据用户信息创建一对token
-func (j JwtService) CreateTokenPair(user sysrep.SystemUser) (*sysrep.Jwt, error) {
+func (j JwtService) CreateTokenPair(user sys.SystemUser) (*sysrep.Jwt, error) {
 	// 根据用户信息创建Claims
 	userClaims := jwtutils.UserClaims{UserId: user.ID, UserUUID: user.Uuid}
 

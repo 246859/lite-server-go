@@ -1,7 +1,8 @@
 package model
 
 import (
-	"liteserver/model/sys/sysrep"
+	"liteserver/model/article"
+	"liteserver/model/sys"
 )
 
 type TableGroup = map[string]TableList
@@ -14,5 +15,7 @@ var (
 	// SystemTableList
 	// @Date: 2023-02-06 22:33:32
 	// 系统表
-	SystemTableList = []interface{}{sysrep.SystemUser{}}
+	SystemTableList = []interface{}{
+		sys.SystemUser{},
+		article.Article{}}
 )

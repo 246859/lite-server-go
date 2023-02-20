@@ -3,6 +3,7 @@ package mailutils
 import (
 	mail "github.com/xhit/go-simple-mail/v2"
 	"liteserver/config"
+	"time"
 )
 
 var SimpleMailClient *MailClient
@@ -61,6 +62,7 @@ func (m *MailClient) connect() error {
 	server.Port = m.MailCfg.Port
 	server.Username = m.MailCfg.Username
 	server.Password = m.MailCfg.Password
+	server.ConnectTimeout = time.Second * 20
 	server.Encryption = mail.EncryptionSTARTTLS
 	server.KeepAlive = true
 
