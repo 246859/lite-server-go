@@ -25,10 +25,12 @@ func (PageService) SelectPage(pageInfo sysreq.PageInfo) Page {
 	limit := pageInfo.Size
 	return func(model *gorm.DB, where Where, dst interface{}) *gorm.DB {
 		db := model.Offset(offset).Limit(limit).Order(`updated_at`)
-		// where执行
-		db = where(db)
+		if where != nil {
+			// where执行
+			db = where(db)
+		}
 		// 如果是降序排序的话
-		if pageInfo.Desc {
+		if pageInfo.Desc != 0 {
 			db = db.Order("updated_at desc")
 		} else {
 			db = db.Order("updated_at")

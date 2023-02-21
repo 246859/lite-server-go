@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"io"
 	"liteserver/utils/response"
 	"net"
 	"net/http/httputil"
@@ -27,10 +28,10 @@ func ZapLogger() gin.HandlerFunc {
 
 		// 包装一下 gin.ResponseWriter
 		responseWriterWrapper := NewResponseWriterWrapper(c)
+
 		c.Writer = responseWriterWrapper
 		// 处理
 		c.Next()
-
 		// 计算耗时
 		cost := float64(time.Since(start).Nanoseconds()) / float64(time.Second)
 		ip := c.ClientIP()
@@ -40,6 +41,10 @@ func ZapLogger() gin.HandlerFunc {
 		ErrorMessage := c.Errors.ByType(gin.ErrorTypePrivate).String()
 		bodySize := c.Writer.Size()
 		responseContent := responseWriterWrapper.String()
+		bytes, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			panic("请求体读取异常")
+		}
 		// 长度过大则不打印
 		if len(responseContent) >= 300 {
 			responseContent = "response length >= 300"
@@ -51,6 +56,7 @@ func ZapLogger() gin.HandlerFunc {
 			zap.Int("Status", status),
 			zap.String("Path", path),
 			zap.String("Query", query),
+			zap.String("ReqBody", string(bytes)),
 			zap.Float64("Cost", cost),
 			zap.Int("BodySize", bodySize),
 			zap.String("Ip", ip),

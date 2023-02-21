@@ -20,7 +20,7 @@ type ArticleController struct {
 // @Method http.MethodGet
 // @Description: 查询单个文章信息
 func (a ArticleController) ArticleInfo(ctx *gin.Context) {
-	articleId := ctx.Param("articleId")
+	articleId := ctx.Query("articleId")
 	ints, err := strconv.Atoi(articleId)
 	if err != nil || ints < 0 {
 		response.FailWithMsg(ctx, "非法的文章ID")

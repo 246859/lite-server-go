@@ -18,9 +18,13 @@ type ArticleService struct {
 // @Return *article.Article
 // @Return error
 // @Description: 根据单个id查询文章内容
-func (a ArticleService) Article(articleId int) (*article.Article, error) {
-	var articleinfo article.Article
-	err := global.DB().Model(articleinfo).Where("id=?", articleId).First(&articleinfo).Error
+func (a ArticleService) Article(articleId int) (*article.ArticleDetails, error) {
+	var articleinfo article.ArticleDetails
+	err := global.DB().
+		Table("system_users u").
+		Select("a.id id", "u.id user_id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
+		Joins("JOIN articles a ON u.id = a.user_id").
+		Where("a.id=?", articleId).Scan(&articleinfo).Error
 	if err != nil {
 		return nil, err
 	} else {
@@ -37,7 +41,10 @@ func (a ArticleService) Article(articleId int) (*article.Article, error) {
 func (a ArticleService) ArticlePage(pageInfo sysreq.PageInfo) ([]article.HeadInfo, error) {
 	page := new(page.PageService).SelectPage(pageInfo)
 	var articleList []article.HeadInfo
-	if err := page(global.Model(article.Article{}), nil, &articleList).Error; err != nil {
+	model := global.DB().Table("articles a").
+		Select("a.id id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
+		Joins("JOIN system_users u ON u.id = a.user_id")
+	if err := page(model, nil, &articleList).Error; err != nil {
 		return nil, err
 	} else {
 		return articleList, nil
