@@ -23,7 +23,7 @@ var ArticleDao = new(dao.ArticleDao)
 // @Description: 根据单个id查询文章内容
 func (a ArticleService) Article(articleId int) (*response.ArticleDetails, error) {
 	if articleId < 0 {
-		return nil, errors.New("非法的文章ID")
+		return nil, errors.New(global.I18nRawCN("article.invalidId"))
 	}
 	articleDetails, err := ArticleDao.GetArticleDetails(articleId)
 	if err != nil {
@@ -84,7 +84,7 @@ func (a ArticleService) DeleteArticle(id int) error {
 // @Description: 更新文章
 func (a ArticleService) UpdateArticle(articleOld *model.Article) error {
 	if !a.HasArticle(articleOld.ID) {
-		return errors.New("文章不存在")
+		return errors.New(global.I18nRawCN("article.notExist"))
 	}
 	err := global.Model(model.Article{}).Updates(articleOld).Error
 	if err != nil {

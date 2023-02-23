@@ -2,6 +2,7 @@ package public
 
 import (
 	"github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/model/request"
 	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
@@ -23,14 +24,14 @@ func (a ArticleController) ArticleInfo(ctx *gin.Context) {
 	articleId := ctx.Query("articleId")
 	ints, err := strconv.Atoi(articleId)
 	if err != nil || ints < 0 {
-		responseuils.FailWithMsg(ctx, "非法的文章ID")
+		responseuils.FailWithMsg(ctx, global.I18nRawCN("article.invalidId"))
 		return
 	}
 
 	if article, err := v1c.ArticleService.Article(ints); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		responseuils.OkWithMsgAndData(ctx, article, "文章信息查询成功")
+		responseuils.OkWithMsgAndData(ctx, article, global.I18nRawCN("article.query.ok"))
 	}
 }
 
@@ -49,6 +50,6 @@ func (a ArticleController) ArticleList(ctx *gin.Context) {
 	if page, err := v1c.ArticleService.ArticlePage(pageInfo); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		responseuils.OkWithMsgAndData(ctx, page, "文章信息查询成功")
+		responseuils.OkWithMsgAndData(ctx, page, global.I18nRawCN("article.query.ok"))
 	}
 }

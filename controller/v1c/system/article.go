@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/model"
 	"github.com/246859/lite-server-go/utils/jwtutils"
 	"github.com/246859/lite-server-go/utils/responseuils"
@@ -24,14 +25,14 @@ func (a ArticleModifyController) DeleteArticle(ctx *gin.Context) {
 	articleId := ctx.Param("articleId")
 	ints, err := strconv.Atoi(articleId)
 	if err != nil || ints < 0 {
-		responseuils.FailWithMsg(ctx, "非法的文章ID")
+		responseuils.FailWithMsg(ctx, global.I18nRawCN("article.invalidId"))
 		return
 	}
 
 	if err := v1c.ArticleService.DeleteArticle(ints); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		responseuils.OkWithMsg(ctx, "文章删除成功")
+		responseuils.OkWithMsg(ctx, global.I18nRawCN("article.delete.ok"))
 	}
 }
 
@@ -49,7 +50,7 @@ func (a ArticleModifyController) UpdateArticle(ctx *gin.Context) {
 	if err := v1c.ArticleService.UpdateArticle(&articleInfo); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		responseuils.OkWithMsg(ctx, "文章更新成功")
+		responseuils.OkWithMsg(ctx, global.I18nRawCN("article.update.ok"))
 	}
 }
 
@@ -73,6 +74,6 @@ func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
 	if err := v1c.ArticleService.CreateArticle(&articleInfo, claims.UserClaims); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		responseuils.OkWithMsg(ctx, "文章创建成功")
+		responseuils.OkWithMsg(ctx, global.I18nRawCN("article.create.ok"))
 	}
 }
