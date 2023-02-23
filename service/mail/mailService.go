@@ -1,12 +1,12 @@
 package mail
 
 import (
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/resource"
+	"github.com/246859/lite-server-go/utils/mailutils"
+	"github.com/246859/lite-server-go/utils/uuidtool"
 	"go.uber.org/zap/buffer"
-	"liteserver/global"
-	"liteserver/model/sys/sysrep"
-	"liteserver/resource"
-	"liteserver/utils/mailutils"
-	"liteserver/utils/uuidtool"
 	"text/template"
 )
 

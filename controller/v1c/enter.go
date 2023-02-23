@@ -1,7 +1,7 @@
 package v1c
 
 import (
-	"liteserver/service"
+	"github.com/246859/lite-server-go/service"
 )
 
 var (

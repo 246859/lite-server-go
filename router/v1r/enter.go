@@ -1,6 +1,6 @@
 package v1r
 
-import "liteserver/controller"
+import "github.com/246859/lite-server-go/controller"
 
 var (
 	AppController    = controller.ControllerGroup

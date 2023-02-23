@@ -2,14 +2,14 @@ package public
 
 import (
 	"errors"
+	v1 "github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/global/code"
+	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	v1 "liteserver/controller/v1c"
-	"liteserver/global"
-	"liteserver/global/code"
-	"liteserver/model/sys/sysrep"
-	"liteserver/model/sys/sysreq"
-	"liteserver/utils/response"
 )
 
 var authenService = v1.SystemService.AuthenticationService

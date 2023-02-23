@@ -3,13 +3,13 @@ package system
 import (
 	"context"
 	"errors"
-	"liteserver/global"
-	"liteserver/model/sys"
-	"liteserver/model/sys/sysrep"
-	"liteserver/model/sys/sysreq"
-	"liteserver/utils/ginutils"
-	"liteserver/utils/mailutils"
-	"liteserver/utils/uuidtool"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/model/sys"
+	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/utils/ginutils"
+	"github.com/246859/lite-server-go/utils/mailutils"
+	"github.com/246859/lite-server-go/utils/uuidtool"
 )
 
 type AuthenticationService struct{}

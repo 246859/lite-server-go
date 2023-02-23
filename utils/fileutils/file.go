@@ -1,8 +1,9 @@
 package fileutils
 
 import (
+	"github.com/246859/lite-server-go/utils"
 	"go.uber.org/zap"
-	"liteserver/utils"
+
 	"os"
 	"os/exec"
 	"path/filepath"

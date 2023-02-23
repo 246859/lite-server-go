@@ -1,13 +1,14 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/utils"
 	"go.uber.org/zap"
-	"liteserver/utils"
+
 	"strings"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"liteserver/config"
 )
 
 // InitGorm

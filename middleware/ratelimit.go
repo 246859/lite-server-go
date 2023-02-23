@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
-	"liteserver/global"
-	"liteserver/utils/response"
 )
 
 // NewRateLimitMiddleware

@@ -1,8 +1,9 @@
 package model
 
 import (
-	"liteserver/model/article"
-	"liteserver/model/sys"
+	"github.com/246859/lite-server-go/model/article"
+	"github.com/246859/lite-server-go/model/interact"
+	"github.com/246859/lite-server-go/model/sys"
 )
 
 type TableGroup = map[string]TableList
@@ -17,5 +18,10 @@ var (
 	// 系统表
 	SystemTableList = []interface{}{
 		sys.SystemUser{},
-		article.Article{}}
+		article.Article{},
+		article.ArticleComment{},
+		article.ArticleLike{},
+		interact.Comment{},
+		interact.Like{},
+	}
 )

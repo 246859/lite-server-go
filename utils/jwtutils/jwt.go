@@ -2,10 +2,11 @@ package jwtutils
 
 import (
 	"errors"
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/utils/uuidtool"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"liteserver/config"
-	"liteserver/utils/uuidtool"
+
 	"time"
 )
 

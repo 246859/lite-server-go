@@ -1,8 +1,8 @@
 package config
 
 import (
+	"github.com/246859/lite-server-go/utils/fileutils"
 	"io"
-	"liteserver/utils/fileutils"
 	"os"
 	"strings"
 	"time"

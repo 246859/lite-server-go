@@ -2,8 +2,9 @@ package middleware
 
 import (
 	"errors"
+	"github.com/246859/lite-server-go/utils/response"
 	"io"
-	"liteserver/utils/response"
+
 	"net"
 	"net/http/httputil"
 	"os"

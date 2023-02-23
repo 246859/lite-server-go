@@ -1,8 +1,6 @@
 package system
 
-import (
-	"liteserver/router/route"
-)
+import "github.com/246859/lite-server-go/router/route"
 
 const (
 	System = "system"

@@ -1,11 +1,12 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/router"
+	"github.com/246859/lite-server-go/router/route"
+	"github.com/246859/lite-server-go/utils/ginutils"
 	"github.com/gin-gonic/gin"
-	"liteserver/config"
-	"liteserver/router"
-	"liteserver/router/route"
-	"liteserver/utils/ginutils"
+
 	"path"
 	"path/filepath"
 )

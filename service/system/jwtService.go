@@ -3,12 +3,13 @@ package system
 import (
 	"context"
 	"errors"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/model/sys"
+	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/utils/jwtutils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"liteserver/global"
-	"liteserver/model/sys"
-	"liteserver/model/sys/sysrep"
-	"liteserver/utils/jwtutils"
+
 	"strings"
 	"time"
 )

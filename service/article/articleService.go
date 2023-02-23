@@ -2,15 +2,17 @@ package article
 
 import (
 	"errors"
-	"liteserver/global"
-	"liteserver/model/article"
-	"liteserver/model/sys/sysreq"
-	"liteserver/service/page"
-	"liteserver/utils/jwtutils"
+	"github.com/246859/lite-server-go/dao"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/model/article"
+	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/utils/jwtutils"
 )
 
 type ArticleService struct {
 }
+
+var ArticleDao = new(dao.ArticleDao)
 
 // Article
 // @Date 2023-02-20 16:25:22
@@ -19,16 +21,14 @@ type ArticleService struct {
 // @Return error
 // @Description: 根据单个id查询文章内容
 func (a ArticleService) Article(articleId int) (*article.ArticleDetails, error) {
-	var articleinfo article.ArticleDetails
-	err := global.DB().
-		Table("system_users u").
-		Select("a.id id", "u.id user_id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
-		Joins("JOIN articles a ON u.id = a.user_id").
-		Where("a.id=?", articleId).Scan(&articleinfo).Error
+	if articleId < 0 {
+		return nil, errors.New("非法的文章ID")
+	}
+	articleDetails, err := ArticleDao.GetArticleDetails(articleId)
 	if err != nil {
 		return nil, err
 	} else {
-		return &articleinfo, nil
+		return &articleDetails, nil
 	}
 }
 
@@ -37,17 +37,13 @@ func (a ArticleService) Article(articleId int) (*article.ArticleDetails, error) 
 // @Param pageInfo sysreq.PageInfo
 // @Return []article.HeadInfo
 // @Return error
-// @Description: 分页查询
+// @Description: 分页查询文章信息列表
 func (a ArticleService) ArticlePage(pageInfo sysreq.PageInfo) ([]article.HeadInfo, error) {
-	page := new(page.PageService).SelectPage(pageInfo)
-	var articleList []article.HeadInfo
-	model := global.DB().Table("articles a").
-		Select("a.id id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
-		Joins("JOIN system_users u ON u.id = a.user_id")
-	if err := page(model, nil, &articleList).Error; err != nil {
+	list, err := ArticleDao.GetArticleInfoList(pageInfo)
+	if err != nil {
 		return nil, err
 	} else {
-		return articleList, nil
+		return list, nil
 	}
 }
 

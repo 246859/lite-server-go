@@ -1,13 +1,13 @@
 package global
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/i18n"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"golang.org/x/text/language"
 	"gorm.io/gorm"
-	"liteserver/config"
-	"liteserver/i18n"
 )
 
 var (

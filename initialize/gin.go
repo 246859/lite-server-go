@@ -1,13 +1,14 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/middleware"
 	cache "github.com/chenyahui/gin-cache"
 	"github.com/chenyahui/gin-cache/persist"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-redis/redis/v8"
-	"liteserver/config"
-	"liteserver/middleware"
+
 	"net/http"
 	"time"
 )

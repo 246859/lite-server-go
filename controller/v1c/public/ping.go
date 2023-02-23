@@ -1,8 +1,8 @@
 package public
 
 import (
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
-	"liteserver/utils/response"
 )
 
 type Ping struct{}

@@ -1,8 +1,9 @@
 package mailutils
 
 import (
+	"github.com/246859/lite-server-go/config"
 	mail "github.com/xhit/go-simple-mail/v2"
-	"liteserver/config"
+
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"liteserver/config"
-	"liteserver/utils/jwtutils"
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/utils/jwtutils"
 )
 
 // InitJwtUtils

@@ -1,10 +1,10 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/utils/fileutils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"liteserver/config"
-	"liteserver/utils/fileutils"
 )
 
 // InitZap

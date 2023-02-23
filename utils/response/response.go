@@ -1,9 +1,10 @@
 package response
 
 import (
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/global/code"
 	"github.com/gin-gonic/gin"
-	"liteserver/global"
-	"liteserver/global/code"
+
 	"net/http"
 )
 

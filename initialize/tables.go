@@ -1,10 +1,10 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/model"
+	"github.com/246859/lite-server-go/utils"
 	"go.uber.org/zap"
-	"liteserver/config"
-	"liteserver/model"
-	"liteserver/utils"
 )
 
 // IniTables

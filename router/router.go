@@ -1,9 +1,9 @@
 package router
 
 import (
-	"liteserver/router/route"
-	"liteserver/router/v1r/public"
-	"liteserver/router/v1r/system"
+	"github.com/246859/lite-server-go/router/route"
+	"github.com/246859/lite-server-go/router/v1r/public"
+	"github.com/246859/lite-server-go/router/v1r/system"
 )
 
 // GinRouter

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"liteserver/service/article"
-	"liteserver/service/file"
-	"liteserver/service/mail"
-	"liteserver/service/system"
+	"github.com/246859/lite-server-go/service/article"
+	"github.com/246859/lite-server-go/service/file"
+	"github.com/246859/lite-server-go/service/mail"
+	"github.com/246859/lite-server-go/service/system"
 )
 
 var AppService = new(ServiceGroup)

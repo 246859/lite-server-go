@@ -1,8 +1,6 @@
 package main
 
-import (
-	"liteserver/server"
-)
+import "github.com/246859/lite-server-go/server"
 
 // main
 // @Date: 2023-01-08 19:43:26

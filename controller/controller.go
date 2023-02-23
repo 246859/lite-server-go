@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"liteserver/controller/v1c/public"
-	"liteserver/controller/v1c/system"
+	"github.com/246859/lite-server-go/controller/v1c/public"
+	"github.com/246859/lite-server-go/controller/v1c/system"
 )
 
 var ControllerGroup = new(Controller)

@@ -1,10 +1,10 @@
 package public
 
 import (
+	"github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
-	"liteserver/controller/v1c"
-	"liteserver/model/sys/sysreq"
-	"liteserver/utils/response"
 	"strconv"
 )
 

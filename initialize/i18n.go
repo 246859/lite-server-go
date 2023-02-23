@@ -1,11 +1,12 @@
 package initialize
 
 import (
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/i18n"
+	"github.com/246859/lite-server-go/utils/fileutils"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"liteserver/config"
-	"liteserver/i18n"
-	"liteserver/utils/fileutils"
+
 	"os"
 	"path/filepath"
 	"strings"

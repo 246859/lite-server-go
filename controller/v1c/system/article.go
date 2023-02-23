@@ -1,11 +1,11 @@
 package system
 
 import (
+	"github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/model/article"
+	"github.com/246859/lite-server-go/utils/jwtutils"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
-	"liteserver/controller/v1c"
-	"liteserver/model/article"
-	"liteserver/utils/jwtutils"
-	"liteserver/utils/response"
 	"strconv"
 )
 

@@ -1,8 +1,10 @@
 package article
 
 import (
+	"github.com/246859/lite-server-go/model/interact"
+	"github.com/246859/lite-server-go/model/sys"
 	"gorm.io/gorm"
-	"liteserver/model/sys"
+
 	"time"
 )
 
@@ -18,6 +20,32 @@ type Article struct {
 	Summary    string         `gorm:"comment:文章摘要;type:varchar(255);" json:"summary" label:"文章摘要" binding:"required"`
 	View       int            `gorm:"comment:浏览量;" json:"view" label:"文章浏览量"`
 	Content    string         `gorm:"comment:文章内容;type:longtext;" json:"content" label:"文章内容" binding:"required"`
+	gorm.Model
+}
+
+// ArticleComment
+// @Date 2023-02-23 20:21:38
+// @Description: 文章评论关联表
+type ArticleComment struct {
+	User      sys.SystemUser   `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Comment   interact.Comment `gorm:"foreignKey:CommentId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Reply     interact.Comment `gorm:"foreignKey:ReplyId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Article   Article          `gorm:"foreignKey:ArticleId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	UserId    uint             `json:"userId" gorm:"comment:评论用户ID;"`
+	CommentId uint             `json:"commentId" gorm:"comment:评论ID;"`
+	ReplyId   uint             `json:"replyId" gorm:"comment:回复的评论ID;"`
+	ArticleId uint             `json:"articleId" gorm:"comment:关联的文章ID;"`
+	gorm.Model
+}
+
+// ArticleLike
+// @Date 2023-02-23 20:53:55
+// @Description: 文章点赞关联表
+type ArticleLike struct {
+	Article   Article       `gorm:"foreignKey:ArticleId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Like      interact.Like `gorm:"foreignKey:LikeId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	ArticleId uint          `json:"articleId" gorm:"comment:关联的文章ID;"`
+	LikeId    uint          `json:"likeId" gorm:"comment:关联的点赞ID;"`
 	gorm.Model
 }
 

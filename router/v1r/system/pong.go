@@ -1,8 +1,8 @@
 package system
 
 import (
-	"liteserver/router/route"
-	"liteserver/router/v1r"
+	"github.com/246859/lite-server-go/router/route"
+	"github.com/246859/lite-server-go/router/v1r"
 	"net/http"
 )
 

@@ -2,10 +2,10 @@ package initialize
 
 import (
 	"context"
+	"github.com/246859/lite-server-go/config"
 
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
-	"liteserver/config"
 )
 
 // InitRedis

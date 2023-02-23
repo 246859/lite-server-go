@@ -2,7 +2,8 @@ package test
 
 import (
 	"fmt"
-	"liteserver/middleware"
+	"github.com/246859/lite-server-go/middleware"
+
 	"testing"
 )
 

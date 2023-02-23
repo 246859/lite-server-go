@@ -2,7 +2,7 @@ package route
 
 import (
 	"errors"
-	"liteserver/middleware"
+	"github.com/246859/lite-server-go/middleware"
 )
 
 // IsNeedToAuth

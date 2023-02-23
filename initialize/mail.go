@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"liteserver/config"
-	"liteserver/utils/mailutils"
+	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/utils/mailutils"
 )
 
 // InitMail

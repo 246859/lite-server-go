@@ -1,12 +1,12 @@
 package public
 
 import (
+	v1 "github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/utils/mailutils"
+	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/validateutils"
 	"github.com/gin-gonic/gin"
-	v1 "liteserver/controller/v1c"
-	"liteserver/global"
-	"liteserver/utils/mailutils"
-	"liteserver/utils/response"
-	"liteserver/utils/validateutils"
 	"time"
 )
 

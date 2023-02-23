@@ -1,9 +1,9 @@
 package system
 
 import (
+	"github.com/246859/lite-server-go/controller/v1c"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
-	"liteserver/controller/v1c"
-	"liteserver/utils/response"
 )
 
 type FileController struct {
@@ -35,7 +35,7 @@ func (f FileController) Upload(ctx *gin.Context) {
 			return
 		}
 	}
-	fileInfo, err := v1c.FileService.SaveUpload(files, ctx)
+	fileInfo, err := v1c.FileService.SaveUploadMultiFile(files, ctx)
 	if err != nil {
 		response.FailWithMsg(ctx, err.Error())
 	} else {

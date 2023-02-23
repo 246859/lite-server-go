@@ -2,14 +2,15 @@ package middleware
 
 import (
 	"errors"
+	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/global/code"
+	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/service"
+	"github.com/246859/lite-server-go/utils/jwtutils"
+	"github.com/246859/lite-server-go/utils/response"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"liteserver/global"
-	"liteserver/global/code"
-	"liteserver/model/sys/sysrep"
-	"liteserver/service"
-	"liteserver/utils/jwtutils"
-	"liteserver/utils/response"
+
 	"net/http"
 )
 
