@@ -25,13 +25,10 @@ type I18nLocale map[string]LocaleRender
 // @Param data any
 // @Param locale language.Tag
 // @Description: 根据key和locale和data来渲染语言信息
-func (l I18nLocale) GetWithData(key string, locale language.Tag, data ...any) (string, error) {
-	render, err := l.getLocaleRender(locale)
-	if err != nil {
-		return "", err
-	}
+func (l I18nLocale) GetWithData(key string, locale language.Tag, data ...any) string {
+	render, _ := l.getLocaleRender(locale)
 	res := l.withData(key, render, data...)
-	return res, nil
+	return res
 }
 
 // GetWithRaw

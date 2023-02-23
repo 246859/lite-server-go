@@ -21,11 +21,11 @@ type FileService struct {
 // @Return *file.FileInfo
 // @Return error
 // @Description: 上传文件
-func (f FileService) SaveUploadMultiFile(fileHeaders []*multipart.FileHeader, ctx *gin.Context) ([]response.FileInfo, error) {
+func (f FileService) SaveUploadMultiFile(fileHeaders []*multipart.FileHeader, ctx *gin.Context, claims *jwtutils.Claims) ([]response.FileInfo, error) {
 	// 创建文件信息切片
 	fileInfoSlice := make([]response.FileInfo, 0, len(fileHeaders))
 	for _, fileHeader := range fileHeaders {
-		if fileInfo, err := SaveUploadSingle(fileHeader, ctx); err != nil {
+		if fileInfo, err := f.SaveUploadSingle(fileHeader, ctx, claims); err != nil {
 			return nil, err
 		} else {
 			fileInfoSlice = append(fileInfoSlice, fileInfo)
@@ -34,11 +34,7 @@ func (f FileService) SaveUploadMultiFile(fileHeaders []*multipart.FileHeader, ct
 	return fileInfoSlice, nil
 }
 
-func SaveUploadSingle(fileHeader *multipart.FileHeader, ctx *gin.Context) (response.FileInfo, error) {
-	claims, err := jwtutils.ToJwtClaims(ctx)
-	if err != nil {
-		return response.FileInfo{}, err
-	}
+func (f FileService) SaveUploadSingle(fileHeader *multipart.FileHeader, ctx *gin.Context, claims *jwtutils.Claims) (response.FileInfo, error) {
 	// 获取文件后缀
 	suffix := fileutils.FileSuffix(fileHeader.Filename)
 	// 新文件名
@@ -52,7 +48,7 @@ func SaveUploadSingle(fileHeader *multipart.FileHeader, ctx *gin.Context) (respo
 		return response.FileInfo{}, err
 	}
 	// 保存文件
-	err = ctx.SaveUploadedFile(fileHeader, path)
+	err := ctx.SaveUploadedFile(fileHeader, path)
 
 	if err == nil {
 		return response.FileInfo{

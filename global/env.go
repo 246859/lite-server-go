@@ -49,15 +49,18 @@ func I18nRawCN(key string) string {
 	return I18nRaw(key, language.Chinese)
 }
 
+func I18nDataCN(key string, data ...any) string {
+	return I18nData(key, language.Chinese, data...)
+}
+
 // I18nData
 // @Date 2023-02-06 22:02:31
 // @Param key string
 // @Param locale language.Tag
 // @Param data ...any
 // @Return string
-// @Return error
 // @Method
 // @Description: 获取带参数的国际化信息
-func I18nData(key string, locale language.Tag, data ...any) (string, error) {
+func I18nData(key string, locale language.Tag, data ...any) string {
 	return I18nLocale.GetWithData(key, locale, data...)
 }

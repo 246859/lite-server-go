@@ -8,7 +8,7 @@ import (
 
 const File = "file"
 
-const Upload = "upload"
+const Upload = "uploads"
 
 type FileRouter struct {
 }
@@ -18,7 +18,7 @@ func (f FileRouter) InitRouter() route.RouterMap {
 		Upload: route.Api{
 			Path:    Upload,
 			Method:  http.MethodPut,
-			Handler: v1r.FileController.Upload,
+			Handler: v1r.FileController.UploadMultipart,
 		},
 	}
 }

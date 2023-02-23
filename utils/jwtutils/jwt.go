@@ -3,6 +3,7 @@ package jwtutils
 import (
 	"errors"
 	"github.com/246859/lite-server-go/config"
+	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/utils/uuidtool"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -34,11 +35,11 @@ type Claims struct {
 func ToJwtClaims(ctx *gin.Context) (*Claims, error) {
 	value, exists := ctx.Get(UserClaimsFlag)
 	if !exists {
-		return nil, errors.New("缺失用户信息")
+		return nil, errors.New(global.I18nRawCN("token.missing"))
 	} else if claims, ok := value.(Claims); ok {
 		return &claims, nil
 	} else {
-		return nil, errors.New("错误的用户信息类型")
+		return nil, errors.New(global.I18nRawCN("token.errortype"))
 	}
 }
 
