@@ -4,10 +4,10 @@ import (
 	"errors"
 	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/global/code"
-	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/service"
 	"github.com/246859/lite-server-go/utils/jwtutils"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 
@@ -27,14 +27,14 @@ func JwtMiddleWare() gin.HandlerFunc {
 		accessToken, err := jwtService.BearerTokenFromHeader(c)
 		if err != nil {
 			c.Abort()
-			response.Forbidden(c, code.TokenInvalid, err.Error())
+			responseuils.Forbidden(c, code.TokenInvalid, err.Error())
 			return
 		}
 
 		// 判断该jwt是否存在于redis中
 		if !jwtService.CheckJwtFromRedis(c, accessToken) {
 			c.Abort()
-			response.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("code.noLogin"))
+			responseuils.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("code.noLogin"))
 			return
 		}
 		// 解析access token
@@ -43,16 +43,16 @@ func JwtMiddleWare() gin.HandlerFunc {
 			c.Abort()
 			switch {
 			case errors.Is(err, jwtutils.ErrJwtNeedToRefresh):
-				response.NilBody(c, http.StatusUnauthorized, code.RefreshToken, global.I18nRawCN("code.refreshToken"))
+				responseuils.NilBody(c, http.StatusUnauthorized, code.RefreshToken, global.I18nRawCN("code.refreshToken"))
 			case errors.Is(err, jwt.ErrTokenExpired):
-				response.Forbidden(c, code.ExpiredToken, global.I18nRawCN("code.expiredToken"))
+				responseuils.Forbidden(c, code.ExpiredToken, global.I18nRawCN("code.expiredToken"))
 			default:
-				response.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("code.noLogin"))
+				responseuils.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("code.noLogin"))
 			}
 		} else {
 			// 将用户的信息放入context中
 			c.Set(jwtutils.UserClaimsFlag, claims)
-			c.Set(jwtutils.UserJwtPayload, sysrep.Jwt{Access: accessToken})
+			c.Set(jwtutils.UserJwtPayload, response.Jwt{Access: accessToken})
 			c.Next()
 		}
 	}

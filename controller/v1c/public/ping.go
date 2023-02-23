@@ -1,7 +1,7 @@
 package public
 
 import (
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,5 +13,5 @@ type Ping struct{}
 // @Method http.MethodGet
 // @Description: 公共连通测试接口
 func (p Ping) Ping(c *gin.Context) {
-	response.OkWithMsg(c, "Pong")
+	responseuils.OkWithMsg(c, "Pong")
 }

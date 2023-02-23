@@ -4,7 +4,7 @@ import (
 	v1 "github.com/246859/lite-server-go/controller/v1c"
 	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/utils/mailutils"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/246859/lite-server-go/utils/validateutils"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -25,20 +25,20 @@ func (m *Mail) SendAuthMail(ctx *gin.Context) {
 	to := ctx.Query("email")
 	// 参数解析
 	if err := ctx.ShouldBind(to); err != nil {
-		response.FailWithMsg(ctx, global.I18nRawCN("request.badPrams"))
+		responseuils.FailWithMsg(ctx, global.I18nRawCN("request.badPrams"))
 		return
 	}
 	if !validateutils.EmailCheck(to) {
-		response.FailWithMsg(ctx, global.I18nRawCN("mail.errorFormat"))
+		responseuils.FailWithMsg(ctx, global.I18nRawCN("mail.errorFormat"))
 		return
 	}
 	// 发送验证邮件
 	mail, err := v1.MailSevice.SendAuthMail(to)
 	if err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 		return
 	}
 	// 存入Redis
 	global.Redis.Set(ctx, mailutils.RedisMailKey(to, mail.Code), mail.Code, time.Duration(mail.Expire)*time.Minute)
-	response.OkWithMsg(ctx, global.I18nRawCN("mail.ok.sendAuth"))
+	responseuils.OkWithMsg(ctx, global.I18nRawCN("mail.ok.sendAuth"))
 }

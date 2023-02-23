@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"errors"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"io"
 
 	"net"
@@ -137,15 +137,15 @@ func RecoveryHandler(c *gin.Context, err any) {
 		value := reflect.ValueOf(err)
 		switch value.Kind() {
 		case reflect.String:
-			response.InternalErrorWithMsg(c, value.String())
+			responseuils.InternalErrorWithMsg(c, value.String())
 		case reflect.Interface:
 			if e, ok := err.(error); ok {
-				response.InternalErrorWithMsg(c, e.Error())
+				responseuils.InternalErrorWithMsg(c, e.Error())
 			} else {
-				response.InternalError(c)
+				responseuils.InternalError(c)
 			}
 		default:
-			response.InternalError(c)
+			responseuils.InternalError(c)
 		}
 	}
 }

@@ -1,0 +1,40 @@
+package model
+
+import (
+	"gorm.io/gorm"
+)
+
+// Article
+// @Date 2023-02-18 18:03:55
+// @Description: 文章数据库表
+type Article struct {
+	SystemUser SystemUser `gorm:"foreignKey:UserId"`
+	UserId     uint       `gorm:"comment:作者ID;" json:"userid" label:"作者Id"`
+	Title      string     `gorm:"comment:文章标题;type:varchar(100);" json:"title" label:"文章标题" binding:"required"`
+	Cover      string     `gorm:"comment:文章封面;type:varchar(255);" json:"cover" label:"文章封面"`
+	Label      string     `gorm:"comment:文章标签;type:varchar(50);" json:"label" label:"文章标签" binding:"required"`
+	Summary    string     `gorm:"comment:文章摘要;type:varchar(255);" json:"summary" label:"文章摘要" binding:"required"`
+	View       int        `gorm:"comment:浏览量;" json:"view" label:"文章浏览量"`
+	Content    string     `gorm:"comment:文章内容;type:longtext;" json:"content" label:"文章内容" binding:"required"`
+	gorm.Model
+}
+
+// ArticleComment
+// @Date 2023-02-23 20:21:38
+// @Description: 文章评论关联表
+type ArticleComment struct {
+	Comment   Comment `gorm:"foreignKey:CommentId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Article   Article `gorm:"foreignKey:ArticleId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	CommentId uint    `json:"commentId" gorm:"comment:评论ID;primaryKey;"`
+	ArticleId uint    `json:"articleId" gorm:"comment:关联的文章ID;primaryKey;"`
+}
+
+// ArticleLike
+// @Date 2023-02-23 20:53:55
+// @Description: 文章点赞关联表
+type ArticleLike struct {
+	Article   Article `gorm:"foreignKey:ArticleId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Like      Like    `gorm:"foreignKey:LikeId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	ArticleId uint    `json:"articleId" gorm:"comment:关联的文章ID;"`
+	LikeId    uint    `json:"likeId" gorm:"comment:关联的点赞ID;"`
+}

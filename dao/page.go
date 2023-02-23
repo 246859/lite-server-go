@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/model/request"
 	"gorm.io/gorm"
 )
 
@@ -22,7 +22,7 @@ type Page func(model *gorm.DB, where Where, dst interface{}) *gorm.DB
 // @Param pageInfo sysreq.PageInfo
 // @Return Page
 // @Description: 返回一个闭包函数，调用时进行分页查询
-func (PageDao) SelectPage(pageInfo sysreq.PageInfo) Page {
+func (PageDao) SelectPage(pageInfo request.PageInfo) Page {
 	offset := (pageInfo.Page - 1) * pageInfo.Size
 	limit := pageInfo.Size
 	return func(model *gorm.DB, where Where, dst interface{}) *gorm.DB {

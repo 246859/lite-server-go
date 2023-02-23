@@ -5,9 +5,9 @@ import (
 	v1 "github.com/246859/lite-server-go/controller/v1c"
 	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/global/code"
-	"github.com/246859/lite-server-go/model/sys/sysrep"
-	"github.com/246859/lite-server-go/model/sys/sysreq"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/model/request"
+	"github.com/246859/lite-server-go/model/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -29,25 +29,25 @@ type Authentication struct {
 // @Method GET
 // @Description: 登录接口
 func (a Authentication) Login(c *gin.Context) {
-	var login sysreq.Login
+	var login request.Login
 	// 参数获取
 	if err := c.ShouldBind(&login); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	// 调用login服务
 	token, err := authenService.Login(&login)
 	if err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	// 将access token存入redis
 	if err := jwtService.SetJwtToRedis(token.Access, login.Email); err != nil {
-		response.InternalErrorWithMsg(c, err.Error())
+		responseuils.InternalErrorWithMsg(c, err.Error())
 		return
 	}
 	// 返回结果
-	response.OkWithParams(c, code.SuccessLogin, token, global.I18nRawCN("authen.ok.login"))
+	responseuils.OkWithParams(c, code.SuccessLogin, token, global.I18nRawCN("authen.ok.login"))
 }
 
 // Register
@@ -57,19 +57,19 @@ func (a Authentication) Login(c *gin.Context) {
 // @Method http.MethodPost
 // @Description: 注册接口
 func (a Authentication) Register(c *gin.Context) {
-	var registerUser sysreq.Register
+	var registerUser request.Register
 	// 参数校验
 	if err := c.ShouldBind(&registerUser); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	// 调用注册服务
 	if err := authenService.Register(&registerUser); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	// 注册成功
-	response.OkWithMsg(c, global.I18nRawCN("authen.ok.regiser"))
+	responseuils.OkWithMsg(c, global.I18nRawCN("authen.ok.regiser"))
 }
 
 // ForgetPassword
@@ -79,17 +79,17 @@ func (a Authentication) Register(c *gin.Context) {
 // @Method http.MethodPost
 // @Description: 忘记密码接口
 func (a Authentication) ForgetPassword(c *gin.Context) {
-	var fgpUser sysreq.ForgetPassword
+	var fgpUser request.ForgetPassword
 	// 参数解析
 	if err := c.ShouldBind(&fgpUser); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	if err := authenService.ForgetPassword(&fgpUser); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
-	response.OkWithMsg(c, global.I18nRawCN("authen.ok.fgp"))
+	responseuils.OkWithMsg(c, global.I18nRawCN("authen.ok.fgp"))
 }
 
 // RefreshToken
@@ -98,10 +98,10 @@ func (a Authentication) ForgetPassword(c *gin.Context) {
 // @Method http.MethodGet
 // @Description: Token刷新接口
 func (a Authentication) RefreshToken(c *gin.Context) {
-	var oldJwt sysrep.Jwt
+	var oldJwt response.Jwt
 	// 先解析参数
 	if err := c.ShouldBind(&oldJwt); err != nil {
-		response.FailWithMsg(c, err.Error())
+		responseuils.FailWithMsg(c, err.Error())
 		return
 	}
 	// 随后调用服务
@@ -109,12 +109,12 @@ func (a Authentication) RefreshToken(c *gin.Context) {
 	if err != nil {
 		switch {
 		case errors.Is(err, jwt.ErrTokenExpired):
-			response.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("token.expired"))
+			responseuils.Forbidden(c, code.AccessNoLogin, global.I18nRawCN("token.expired"))
 		default:
-			response.FailWithMsg(c, err.Error())
+			responseuils.FailWithMsg(c, err.Error())
 		}
 		return
 	}
 	// 返回新的token
-	response.OkWithParams(c, code.SuccessRefresh, token, global.I18nRawCN("token.refreshOk"))
+	responseuils.OkWithParams(c, code.SuccessRefresh, token, global.I18nRawCN("token.refreshOk"))
 }

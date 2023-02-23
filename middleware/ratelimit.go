@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/246859/lite-server-go/global"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
 )
@@ -19,7 +19,7 @@ func NewRateLimitMiddleware(rate float64, limit int64) gin.HandlerFunc {
 		// 拿出一个令牌，如果拿不出来,则说明可能达到顶峰
 		if bucket.TakeAvailable(1) < 1 {
 			ctx.Abort()
-			response.FailWithMsg(ctx, global.I18nRawCN("response.ratelimit"))
+			responseuils.FailWithMsg(ctx, global.I18nRawCN("response.ratelimit"))
 			return
 		}
 		ctx.Next()

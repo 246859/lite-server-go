@@ -2,7 +2,7 @@ package mail
 
 import (
 	"github.com/246859/lite-server-go/global"
-	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/resource"
 	"github.com/246859/lite-server-go/utils/mailutils"
 	"github.com/246859/lite-server-go/utils/uuidtool"
@@ -12,7 +12,7 @@ import (
 
 type MailService struct{}
 
-func (m *MailService) SendAuthMail(to string) (*sysrep.AuthMail, error) {
+func (m *MailService) SendAuthMail(to string) (*response.AuthMail, error) {
 	// 生成UUID
 	uuid := uuidtool.NewUUIDv5()
 	// 截取后6位
@@ -25,7 +25,7 @@ func (m *MailService) SendAuthMail(to string) (*sysrep.AuthMail, error) {
 	// 创建writer
 	buff := &buffer.Buffer{}
 	// 创建邮件待解析数据
-	mailData := &sysrep.AuthMail{Code: code, Expire: global.Config.MailConfig.Expire, To: to}
+	mailData := &response.AuthMail{Code: code, Expire: global.Config.MailConfig.Expire, To: to}
 	// 解析数据
 	err = mailTemplate.Execute(buff, mailData)
 	if err != nil {

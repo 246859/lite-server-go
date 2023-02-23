@@ -4,8 +4,9 @@ import (
 	"errors"
 	"github.com/246859/lite-server-go/dao"
 	"github.com/246859/lite-server-go/global"
-	"github.com/246859/lite-server-go/model/article"
-	"github.com/246859/lite-server-go/model/sys/sysreq"
+	"github.com/246859/lite-server-go/model"
+	"github.com/246859/lite-server-go/model/request"
+	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/utils/jwtutils"
 )
 
@@ -20,7 +21,7 @@ var ArticleDao = new(dao.ArticleDao)
 // @Return *article.Article
 // @Return error
 // @Description: 根据单个id查询文章内容
-func (a ArticleService) Article(articleId int) (*article.ArticleDetails, error) {
+func (a ArticleService) Article(articleId int) (*response.ArticleDetails, error) {
 	if articleId < 0 {
 		return nil, errors.New("非法的文章ID")
 	}
@@ -38,7 +39,7 @@ func (a ArticleService) Article(articleId int) (*article.ArticleDetails, error) 
 // @Return []article.HeadInfo
 // @Return error
 // @Description: 分页查询文章信息列表
-func (a ArticleService) ArticlePage(pageInfo sysreq.PageInfo) ([]article.HeadInfo, error) {
+func (a ArticleService) ArticlePage(pageInfo request.PageInfo) ([]response.HeadInfo, error) {
 	list, err := ArticleDao.GetArticleInfoList(pageInfo)
 	if err != nil {
 		return nil, err
@@ -52,9 +53,9 @@ func (a ArticleService) ArticlePage(pageInfo sysreq.PageInfo) ([]article.HeadInf
 // @Param article *article.Article
 // @Return error
 // @Description: 创建一篇新文章
-func (a ArticleService) CreateArticle(newArticle *article.Article, claims jwtutils.UserClaims) error {
+func (a ArticleService) CreateArticle(newArticle *model.Article, claims jwtutils.UserClaims) error {
 	newArticle.UserId = claims.UserId
-	err := global.DB().Model(article.Article{}).Create(newArticle).Error
+	err := global.DB().Model(model.Article{}).Create(newArticle).Error
 	if err != nil {
 		return err
 	} else {
@@ -68,7 +69,7 @@ func (a ArticleService) CreateArticle(newArticle *article.Article, claims jwtuti
 // @Return error
 // @Description: 删除文章
 func (a ArticleService) DeleteArticle(id int) error {
-	err := global.DB().Model(article.Article{}).Delete("id=?", id).Error
+	err := global.DB().Model(model.Article{}).Delete("id=?", id).Error
 	if err != nil {
 		return err
 	} else {
@@ -81,11 +82,11 @@ func (a ArticleService) DeleteArticle(id int) error {
 // @Param articleOld *article.Article
 // @Return error
 // @Description: 更新文章
-func (a ArticleService) UpdateArticle(articleOld *article.Article) error {
+func (a ArticleService) UpdateArticle(articleOld *model.Article) error {
 	if !a.HasArticle(articleOld.ID) {
 		return errors.New("文章不存在")
 	}
-	err := global.Model(article.Article{}).Updates(articleOld).Error
+	err := global.Model(model.Article{}).Updates(articleOld).Error
 	if err != nil {
 		return err
 	}
@@ -99,6 +100,6 @@ func (a ArticleService) UpdateArticle(articleOld *article.Article) error {
 // @Description: 判断文章是否存在
 func (a ArticleService) HasArticle(id uint) bool {
 	var count *int64
-	global.DB().Model(article.Article{}).Where("id=?", id).Count(count)
+	global.DB().Model(model.Article{}).Where("id=?", id).Count(count)
 	return *count >= 0
 }

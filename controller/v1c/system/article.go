@@ -2,9 +2,9 @@ package system
 
 import (
 	"github.com/246859/lite-server-go/controller/v1c"
-	"github.com/246859/lite-server-go/model/article"
+	"github.com/246859/lite-server-go/model"
 	"github.com/246859/lite-server-go/utils/jwtutils"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -24,14 +24,14 @@ func (a ArticleModifyController) DeleteArticle(ctx *gin.Context) {
 	articleId := ctx.Param("articleId")
 	ints, err := strconv.Atoi(articleId)
 	if err != nil || ints < 0 {
-		response.FailWithMsg(ctx, "非法的文章ID")
+		responseuils.FailWithMsg(ctx, "非法的文章ID")
 		return
 	}
 
 	if err := v1c.ArticleService.DeleteArticle(ints); err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		response.OkWithMsg(ctx, "文章删除成功")
+		responseuils.OkWithMsg(ctx, "文章删除成功")
 	}
 }
 
@@ -41,15 +41,15 @@ func (a ArticleModifyController) DeleteArticle(ctx *gin.Context) {
 // @Method http.MethodPost
 // @Description: 更新文章接口
 func (a ArticleModifyController) UpdateArticle(ctx *gin.Context) {
-	var articleInfo article.Article
+	var articleInfo model.Article
 	if err := ctx.ShouldBindUri(&articleInfo); err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 		return
 	}
 	if err := v1c.ArticleService.UpdateArticle(&articleInfo); err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		response.OkWithMsg(ctx, "文章更新成功")
+		responseuils.OkWithMsg(ctx, "文章更新成功")
 	}
 }
 
@@ -59,20 +59,20 @@ func (a ArticleModifyController) UpdateArticle(ctx *gin.Context) {
 // @Method http.MethodPost
 // @Description: 创建文章接口
 func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
-	var articleInfo article.Article
+	var articleInfo model.Article
 	if err := ctx.ShouldBind(&articleInfo); err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 		return
 	}
 	claims, err := jwtutils.ToJwtClaims(ctx)
 	if err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 		return
 	}
 
 	if err := v1c.ArticleService.CreateArticle(&articleInfo, claims.UserClaims); err != nil {
-		response.FailWithMsg(ctx, err.Error())
+		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
-		response.OkWithMsg(ctx, "文章创建成功")
+		responseuils.OkWithMsg(ctx, "文章创建成功")
 	}
 }

@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/246859/lite-server-go/global"
-	"github.com/246859/lite-server-go/model/sys"
-	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model"
+	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/utils/jwtutils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -24,7 +24,7 @@ type JwtService struct {
 // @Return error
 // @Method
 // @Description: 根据用户信息创建一对token
-func (j JwtService) CreateTokenPair(user sys.SystemUser) (*sysrep.Jwt, error) {
+func (j JwtService) CreateTokenPair(user model.SystemUser) (*response.Jwt, error) {
 	// 根据用户信息创建Claims
 	userClaims := jwtutils.UserClaims{UserId: user.ID, UserUUID: user.Uuid}
 
@@ -44,7 +44,7 @@ func (j JwtService) CreateTokenPair(user sys.SystemUser) (*sysrep.Jwt, error) {
 		return nil, err
 	}
 
-	return &sysrep.Jwt{
+	return &response.Jwt{
 		Access:  accessToken,
 		Refresh: refreshToken,
 	}, nil
@@ -176,7 +176,7 @@ func (j JwtService) ParseHs256Token(token string, sign string) (jwtutils.Claims,
 // @Return sysrep.Jwt
 // @Return error
 // @Description: Token刷新服务
-func (j JwtService) TokenRefresh(token sysrep.Jwt) (*sysrep.Jwt, error) {
+func (j JwtService) TokenRefresh(token response.Jwt) (*response.Jwt, error) {
 	accessClaims, err := j.ParseAccessToken(token.Access)
 	// 只有access处于需要刷新的状态才有必要刷新token
 	if err != nil && !errors.Is(err, jwtutils.ErrJwtNeedToRefresh) {
@@ -203,7 +203,7 @@ func (j JwtService) TokenRefresh(token sysrep.Jwt) (*sysrep.Jwt, error) {
 	if err := j.SetJwtToRedis(newAccessToken, refreshClaims.UserUUID); err != nil {
 		return nil, err
 	}
-	return &sysrep.Jwt{
+	return &response.Jwt{
 		Access:  newAccessToken,
 		Refresh: token.Refresh,
 	}, nil

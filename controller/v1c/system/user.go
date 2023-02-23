@@ -3,9 +3,9 @@ package system
 import (
 	"github.com/246859/lite-server-go/controller/v1c"
 	"github.com/246859/lite-server-go/global"
-	"github.com/246859/lite-server-go/model/sys/sysrep"
+	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/utils/jwtutils"
-	"github.com/246859/lite-server-go/utils/response"
+	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -60,7 +60,7 @@ func (u UserController) Logout(ctx *gin.Context) {
 	// 从Redis中获取token
 	value, exists := ctx.Get(jwtutils.UserJwtPayload)
 	// 删除Redis值
-	if jwtObj, ok := value.(sysrep.Jwt); ok && exists {
+	if jwtObj, ok := value.(response.Jwt); ok && exists {
 		if v1c.SystemService.JwtService.DelRedisAccessToken(jwtObj.Access) != nil {
 			fail = true
 		}
@@ -68,9 +68,9 @@ func (u UserController) Logout(ctx *gin.Context) {
 		fail = true
 	}
 	if fail {
-		response.FailWithMsg(ctx, global.I18nRawCN("authen.fail.logout"))
+		responseuils.FailWithMsg(ctx, global.I18nRawCN("authen.fail.logout"))
 	} else {
-		response.OkWithMsg(ctx, global.I18nRawCN("authen.ok.logout"))
+		responseuils.OkWithMsg(ctx, global.I18nRawCN("authen.ok.logout"))
 	}
 }
 

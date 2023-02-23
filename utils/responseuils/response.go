@@ -1,4 +1,4 @@
-package response
+package responseuils
 
 import (
 	"github.com/246859/lite-server-go/global"
