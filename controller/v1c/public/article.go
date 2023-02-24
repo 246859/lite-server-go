@@ -19,6 +19,7 @@ type ArticleController struct {
 // @Date 2023-02-20 17:57:40
 // @Param ctx *gin.Context
 // @Method http.MethodGet
+// @Url /article/info
 // @Description: 查询单个文章信息
 func (a ArticleController) ArticleInfo(ctx *gin.Context) {
 	articleId := ctx.Query("articleId")
@@ -39,6 +40,7 @@ func (a ArticleController) ArticleInfo(ctx *gin.Context) {
 // @Date 2023-02-20 17:58:35
 // @Param ctx *gin.Context
 // @Method http.MethodGet
+// @Url /article/list
 // @Description: 分页查询
 func (a ArticleController) ArticleList(ctx *gin.Context) {
 	var pageInfo request.PageInfo
@@ -52,4 +54,17 @@ func (a ArticleController) ArticleList(ctx *gin.Context) {
 	} else {
 		responseuils.OkWithMsgAndData(ctx, page, global.I18nRawCN("article.query.ok"))
 	}
+}
+
+// ArticleComment
+// @Date 2023-02-24 19:52:27
+// @Method http.MethodGet
+// @Url /article/comment
+// @Param articleId string 文章ID
+// @Param page int 页数
+// @Param size int 页容量
+// @Param desc bool 顺序
+// @Description: 获取文章的评论列表
+func (ArticleController) ArticleComment(ctx *gin.Context) {
+
 }

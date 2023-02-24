@@ -8,8 +8,15 @@ import (
 // @Date 2023-02-23 20:25:46
 // @Description: 点赞信息表
 type Like struct {
+	LikeTN
 	User   SystemUser `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 	UserId uint       `json:"userId" gorm:"comment:用户ID;"`
 	Like   int        `json:"like" gorm:"comment:点赞数量;type:bigint;"`
 	gorm.Model
+}
+
+type LikeTN struct{}
+
+func (LikeTN) TableName() string {
+	return "likes"
 }

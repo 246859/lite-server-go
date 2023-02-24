@@ -44,7 +44,8 @@ func (ArticleDao) GetArticleInfoList(pageInfo request.PageInfo) ([]response.Head
 	}
 }
 
-func (ArticleDao) GetArticleCommentList(pageInfo request.PageInfo) ([]response.ArticleCommentInfo, error) {
+func (ArticleDao) GetArticleCommentList(pageInfo request.PageInfo, articleId int) ([]response.ArticleCommentInfo, error) {
 	//page := PageHelper.SelectPage(pageInfo)
+	//model := global.DB().Table("")
 	return nil, nil
 }

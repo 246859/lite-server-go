@@ -12,13 +12,17 @@ var (
 	// 系统表
 	SystemTableList = []interface{}{
 		SystemUser{},
+
 		Article{},
 		ArticleComment{},
-		ArticleLike{},
-		Comment{},
-		CommentReply{},
-		Like{},
+
 		Share{},
+		ShareComment{},
+
+		Comment{},
+		Reply{},
+		Like{},
+
 		File{},
 	}
 )
