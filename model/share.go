@@ -35,5 +35,5 @@ type ShareComment struct {
 type ShareCommentTN struct{}
 
 func (ShareCommentTN) TableName() string {
-	return "share_comments"
+	return "shares_comments"
 }

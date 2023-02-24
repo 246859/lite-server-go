@@ -42,5 +42,5 @@ type ArticleComment struct {
 type ArticleCommentTN struct{}
 
 func (ArticleCommentTN) TableName() string {
-	return "article_comments"
+	return "articles_comments"
 }
