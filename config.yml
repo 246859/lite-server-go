@@ -85,9 +85,9 @@ jwt:
 
 # 邮件配置
 mail:
-  host: smtp.exmail.qq.com
+  host: smtp.qq.com
   port: 465
-  username: vegetable-programmer@halfiisland.com
-  password: Wyh246859
+  username: 2633565580@qq.com
+  password: uulvlwddcsyjdide
   expire: 5
   limit: 1

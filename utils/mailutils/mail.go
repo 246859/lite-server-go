@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+// 全部弃用
+
 var SimpleMailClient *MailClient
 
 func NewMailClient(mailConfig *config.MailConfig) *MailClient {

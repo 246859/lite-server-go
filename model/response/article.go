@@ -44,11 +44,12 @@ type ArticleDetails struct {
 // @Date 2023-02-23 22:14:48
 // @Description: 文章评论信息
 type ArticleCommentInfo struct {
-	model.ArticleCommentTN `json:"_"`
-	User                   UserSimpleInfo `gorm:"foreignKey;UserId"`
-	UserId                 uint           `json:"userId" label:"用户ID"`
-	ArticleId              uint           `json:"articleId" label:"文章ID"`
-	ReplyList              []ReplyInfo    `json:"replyId" label:"回复ID"`
-	Content                string         `json:"content" label:"评论内容"`
-	UpdatedAt              time.Time      `json:"UpdatedAt" label:"更新时间"`
+	model.CommentTN `json:"_"`
+	ID              uint           `gorm:"primaryKey;"`
+	User            UserSimpleInfo `gorm:"foreignKey:UserId;"`
+	UserId          uint           `json:"userId" label:"用户ID"`
+	ArticleId       uint           `json:"articleId" label:"文章ID"`
+	ReplyList       []ReplyInfo    `gorm:"foreignKey:CommentId;" json:"replyId" label:"回复ID"`
+	Content         string         `json:"content" label:"评论内容"`
+	UpdatedAt       time.Time      `json:"UpdatedAt" label:"更新时间"`
 }

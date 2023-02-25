@@ -11,6 +11,5 @@ import (
 // @Method
 // @Description: 初始化邮件服务器
 func InitMail(config *config.MailConfig) {
-	mailClient := mailutils.NewMailClient(config)
-	mailutils.SimpleMailClient = mailClient
+	mailutils.SetConfig(config)
 }

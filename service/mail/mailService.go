@@ -31,7 +31,7 @@ func (m *MailService) SendAuthMail(to string) (*response.AuthMail, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = mailutils.SimpleMailClient.SendHtmlMail(global.I18nRawCN("mail.authmail"), buff.String(), mailData.To)
+	err = mailutils.SendHtmlMail(global.I18nRawCN("mail.authmail"), mailData.To, buff.String())
 	if err != nil {
 		return nil, err
 	}

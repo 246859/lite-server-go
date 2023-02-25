@@ -1,7 +1,11 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/246859/lite-server-go/dao"
+	"github.com/246859/lite-server-go/model"
+	"github.com/246859/lite-server-go/model/request"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"testing"
@@ -50,7 +54,27 @@ type Reply struct {
 }
 
 func TestArticleCommentReplyList(t *testing.T) {
-	var data []ArticleComment
-	db.Table("comments").Preload("User").Preload("Replies").Preload("Replies.User").Find(&data)
-	fmt.Printf("%+v\n", data)
+	list, err := dao.ArticleDao{}.GetArticleCommentList(db, request.PageInfo{
+		Page: 1,
+		Size: 1,
+		Desc: 0,
+	}, 1)
+	fmt.Println(ToJsonString(list))
+	fmt.Println(ToJsonString(err))
+}
+
+func ToJsonString(a any) string {
+	marshal, err := json.MarshalIndent(a, "", "\t")
+	if err != nil {
+		return ""
+	} else {
+		return string(marshal)
+	}
+}
+
+func TestStructField(t *testing.T) {
+	var c model.Comment
+	// gorm 没法根据结构体字段名来查询，得手动输入表字段名
+	db.Model(model.CommentTN{}).Where("? = ?", model.Comment{}.ID, 1).First(&c)
+	fmt.Println(c)
 }

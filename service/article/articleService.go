@@ -25,7 +25,7 @@ func (a ArticleService) Article(articleId int) (*response.ArticleDetails, error)
 	if articleId < 0 {
 		return nil, errors.New(global.I18nRawCN("article.invalidId"))
 	}
-	articleDetails, err := ArticleDao.GetArticleDetails(articleId)
+	articleDetails, err := ArticleDao.GetArticleDetails(global.DB(), articleId)
 	if err != nil {
 		return nil, err
 	} else {
@@ -40,12 +40,20 @@ func (a ArticleService) Article(articleId int) (*response.ArticleDetails, error)
 // @Return error
 // @Description: 分页查询文章信息列表
 func (a ArticleService) ArticlePage(pageInfo request.PageInfo) ([]response.HeadInfo, error) {
-	list, err := ArticleDao.GetArticleInfoList(pageInfo)
-	if err != nil {
-		return nil, err
-	} else {
-		return list, nil
-	}
+	list, err := ArticleDao.GetArticleInfoList(global.DB(), pageInfo)
+	return list, err
+}
+
+// ArticleCommentList
+// @Date 2023-02-25 15:57:03
+// @Param pageInfo request.PageInfo
+// @Param articleId int
+// @Return []response.ArticleCommentInfo
+// @Return error
+// @Description: 分页查询一个文章的所有信息列表
+func (a ArticleService) ArticleCommentList(pageInfo request.PageInfo, articleId int) ([]response.ArticleCommentInfo, error) {
+	list, err := ArticleDao.GetArticleCommentList(global.DB(), pageInfo, articleId)
+	return list, err
 }
 
 // CreateArticle

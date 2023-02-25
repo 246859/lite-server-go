@@ -26,11 +26,11 @@ func (PageDao) SelectPage(pageInfo request.PageInfo) Page {
 	offset := (pageInfo.Page - 1) * pageInfo.Size
 	limit := pageInfo.Size
 	return func(model *gorm.DB, where Where, dst interface{}) *gorm.DB {
-		db := model.Offset(offset).Limit(limit).Order(`updated_at`)
 		if where != nil {
 			// where执行
-			db = where(db)
+			model = where(model)
 		}
+		db := model.Offset(offset).Limit(limit).Order(`updated_at`)
 		// 如果是降序排序的话
 		if pageInfo.Desc != 0 {
 			db = db.Order("updated_at desc")
