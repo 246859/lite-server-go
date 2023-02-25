@@ -8,39 +8,68 @@ import (
 // @Date 2023-02-18 18:03:55
 // @Description: 文章数据库表
 type Article struct {
-	ArticleTN
+	ArticleMeta
 	SystemUser SystemUser `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
+	Class      Class      `gorm:"foreignKey:ClassId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 
-	UserId  uint   `gorm:"comment:作者ID;" json:"userid" label:"作者Id"`
-	Title   string `gorm:"comment:文章标题;type:varchar(100);" json:"title" label:"文章标题" binding:"required"`
-	Cover   string `gorm:"comment:文章封面;type:varchar(255);" json:"cover" label:"文章封面"`
-	Label   string `gorm:"comment:文章标签;type:varchar(50);" json:"label" label:"文章标签" binding:"required"`
-	Summary string `gorm:"comment:文章摘要;type:varchar(255);" json:"summary" label:"文章摘要" binding:"required"`
-	View    int    `gorm:"comment:浏览量;" json:"view" label:"文章浏览量"`
-	Content string `gorm:"comment:文章内容;type:longtext;" json:"content" label:"文章内容" binding:"required"`
+	UserId  uint   `gorm:"comment:作者ID;" json:"userid"`
+	ClassId uint   `gorm:"comment:分类ID;" json:"classId"`
+	Title   string `gorm:"comment:文章标题;type:varchar(100);" json:"title"`
+	Cover   string `gorm:"comment:文章封面;type:varchar(255);" json:"cover"`
+	Label   string `gorm:"comment:文章标签;type:varchar(50);" json:"label"`
+	Summary string `gorm:"comment:文章摘要;type:varchar(255);" json:"summary"`
+	View    int    `gorm:"comment:浏览量;" json:"view"`
+	Content string `gorm:"comment:文章内容;type:longtext;" json:"content"`
 	gorm.Model
 }
 
-type ArticleTN struct{}
+type ArticleMeta struct{}
 
-func (ArticleTN) TableName() string {
+func (ArticleMeta) TableComment() string {
+	return "文章信息表"
+}
+
+func (ArticleMeta) TableName() string {
 	return "articles"
+}
+
+// Class
+// @Date 2023-02-25 19:07:01
+// @Description: 文章分类表
+type Class struct {
+	ClassMeta
+	Name string `gorm:"comment:分类名称;type:varchar(255);"`
+	gorm.Model
+}
+
+type ClassMeta struct{}
+
+func (ClassMeta) TableComment() string {
+	return "分类信息表"
+}
+
+func (ClassMeta) TableName() string {
+	return "classes"
 }
 
 // ArticleComment
 // @Date 2023-02-23 20:21:38
 // @Description: 文章评论关联表
 type ArticleComment struct {
+	ArticleCommentMeta
 	Comment Comment `gorm:"foreignKey:CommentId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 	Article Article `gorm:"foreignKey:ArticleId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
-	ArticleCommentTN
 
 	CommentId uint `json:"commentId" gorm:"comment:评论ID;primaryKey;"`
 	ArticleId uint `json:"articleId" gorm:"comment:关联的文章ID;primaryKey;"`
 }
 
-type ArticleCommentTN struct{}
+type ArticleCommentMeta struct{}
 
-func (ArticleCommentTN) TableName() string {
+func (ArticleCommentMeta) TableComment() string {
+	return "文章-评论关联表"
+}
+
+func (ArticleCommentMeta) TableName() string {
 	return "articles_comments"
 }

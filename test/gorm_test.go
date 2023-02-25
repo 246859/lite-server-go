@@ -75,6 +75,11 @@ func ToJsonString(a any) string {
 func TestStructField(t *testing.T) {
 	var c model.Comment
 	// gorm 没法根据结构体字段名来查询，得手动输入表字段名
-	db.Model(model.CommentTN{}).Where("? = ?", model.Comment{}.ID, 1).First(&c)
+	db.Model(model.CommentMeta{}).Where("? = ?", model.Comment{}.ID, 1).First(&c)
 	fmt.Println(c)
+}
+
+func TestModel(t *testing.T) {
+	// 这里犯了一个错误，方法名跟结构体字段同名
+	fmt.Println(model.Reply{}.TableComment())
 }

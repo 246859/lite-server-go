@@ -77,3 +77,33 @@ func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
 		responseuils.OkWithMsg(ctx, global.I18nRawCN("article.create.ok"))
 	}
 }
+
+// PublishArticleComment
+// @Date 2023-02-25 18:43:22
+// @Param ctx *gin.Context
+// @Method http.MethodPost
+// @Url /article/comment
+// @Description: 发布评论
+func (ArticleModifyController) PublishArticleComment(ctx *gin.Context) {
+
+}
+
+// DeleteArticleComment
+// @Date 2023-02-25 18:46:03
+// @Param ctx *gin.Context
+// @Method http.MethodDelete
+// @Url /article/comment
+// @Description: 删除文章评论
+func (ArticleModifyController) DeleteArticleComment(ctx *gin.Context) {
+
+}
+
+// UpdateArticleComment
+// @Date 2023-02-25 18:47:54
+// @Param ctx *gin.Context
+// @Method http.MethodPut
+// @Url /article/comment
+// @Description: 更新文章评论
+func (ArticleModifyController) UpdateArticleComment(ctx *gin.Context) {
+
+}

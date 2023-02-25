@@ -6,7 +6,7 @@ import "gorm.io/gorm"
 // @Date 2023-02-23 20:58:37
 // @Description: 动态信息表
 type Share struct {
-	ShareTN
+	ShareMeta
 	User SystemUser `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 
 	UserId  uint   `json:"userId" gorm:"comment:用户ID;"`
@@ -14,9 +14,13 @@ type Share struct {
 	gorm.Model
 }
 
-type ShareTN struct{}
+type ShareMeta struct{}
 
-func (ShareTN) TableName() string {
+func (ShareMeta) TableComment() string {
+	return "动态信息表"
+}
+
+func (ShareMeta) TableName() string {
 	return "shares"
 }
 
@@ -24,7 +28,7 @@ func (ShareTN) TableName() string {
 // @Date 2023-02-24 23:44:43
 // @Description: 动态评论关联表
 type ShareComment struct {
-	ShareCommentTN
+	ShareCommentMeta
 	Comment Comment `gorm:"foreignKey:CommentId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 	Share   Share   `gorm:"foreignKey:ShareId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 
@@ -32,8 +36,12 @@ type ShareComment struct {
 	ShareId   uint `json:"shareId" gorm:"comment:动态ID;primaryKey;"`
 }
 
-type ShareCommentTN struct{}
+type ShareCommentMeta struct{}
 
-func (ShareCommentTN) TableName() string {
+func (ShareCommentMeta) TableComment() string {
+	return "动态-评论关联表"
+}
+
+func (ShareCommentMeta) TableName() string {
 	return "shares_comments"
 }

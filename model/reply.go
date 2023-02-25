@@ -8,7 +8,7 @@ import (
 // @Date 2023-02-23 22:30:16
 // @Description: 回复信息表
 type Reply struct {
-	ReplyTN
+	ReplyMeta
 	User    SystemUser `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 	Comment Comment    `gorm:"foreignKey:CommentId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 
@@ -18,8 +18,12 @@ type Reply struct {
 	gorm.Model
 }
 
-type ReplyTN struct{}
+type ReplyMeta struct{}
 
-func (ReplyTN) TableName() string {
+func (ReplyMeta) TableComment() string {
+	return "回复信息表"
+}
+
+func (ReplyMeta) TableName() string {
 	return "replies"
 }

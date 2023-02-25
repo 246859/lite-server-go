@@ -56,7 +56,7 @@ func (a ArticleController) ArticleList(ctx *gin.Context) {
 	}
 }
 
-// ArticleComment
+// ArticleCommentList
 // @Date 2023-02-24 19:52:27
 // @Method http.MethodGet
 // @Url /article/comment
@@ -65,6 +65,6 @@ func (a ArticleController) ArticleList(ctx *gin.Context) {
 // @Param size int 页容量
 // @Param desc bool 顺序
 // @Description: 获取文章的评论列表
-func (ArticleController) ArticleComment(ctx *gin.Context) {
+func (ArticleController) ArticleCommentList(ctx *gin.Context) {
 
 }

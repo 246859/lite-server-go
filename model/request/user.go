@@ -27,3 +27,13 @@ type ForgetPassword struct {
 	Password string `json:"password" binding:"required" label:"用户密码"`
 	Ecode    string `json:"ecode" binding:"required" label:"邮箱验证码"`
 }
+
+// UpdateUser
+// @Date 2023-02-25 19:23:40
+// @Description: 更新用户结构体
+type UpdateUser struct {
+	Avatar      string `json:"avatar" label:"头像" binding:"required"`
+	Nickname    string `json:"nickname" label:"昵称" binding:"required"`
+	Password    string `json:"password" label:"密码" binding:"required"`
+	Description string `json:"description" label:"自我描述" binding:"required"`
+}

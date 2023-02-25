@@ -1,7 +1,12 @@
 package model
 
+type TableMeta interface {
+	TableComment() string
+	TableName() string
+}
+
 type TableGroup = map[string]TableList
-type TableList = []interface{}
+type TableList = []TableMeta
 
 var (
 	ModelTableGroup = &TableGroup{
@@ -10,8 +15,10 @@ var (
 	// SystemTableList
 	// @Date: 2023-02-06 22:33:32
 	// 系统表
-	SystemTableList = []interface{}{
+	SystemTableList = []TableMeta{
 		SystemUser{},
+		Class{},
+		File{},
 
 		Article{},
 		ArticleComment{},
@@ -22,7 +29,5 @@ var (
 		Comment{},
 		Reply{},
 		Like{},
-
-		File{},
 	}
 )

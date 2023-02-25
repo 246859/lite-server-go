@@ -8,7 +8,7 @@ import (
 // @Date 2023-02-23 20:23:46
 // @Description: 评论信息表
 type Comment struct {
-	CommentTN
+	CommentMeta
 	User SystemUser `gorm:"foreignKey:UserId;constraint:onUpdate:RESTRICT,onDelete:CASCADE"`
 
 	UserId  uint   `json:"userId" gorm:"comment:用户ID;"`
@@ -16,8 +16,12 @@ type Comment struct {
 	gorm.Model
 }
 
-type CommentTN struct{}
+type CommentMeta struct{}
 
-func (CommentTN) TableName() string {
+func (CommentMeta) TableComment() string {
+	return "评论信息表"
+}
+
+func (CommentMeta) TableName() string {
 	return "comments"
 }

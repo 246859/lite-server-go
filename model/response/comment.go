@@ -18,7 +18,7 @@ type CommentInfo struct {
 // @Date 2023-02-23 23:03:03
 // @Description:  回复展示信息
 type ReplyInfo struct {
-	model.ReplyTN
+	model.ReplyMeta
 	ID        uint           `gorm:"primaryKey;"`
 	User      UserSimpleInfo `json:"user" label:"用户信息" gorm:"foreignKey:UserId"`
 	UserId    uint           `json:"userId"`
