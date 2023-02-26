@@ -24,7 +24,14 @@ var (
 // @Description: 获取默认的GormDB
 // @Return: *gorm.DB
 func DB() *gorm.DB {
-	if db, ok := (*GormDBGroup)["main"]; ok {
+	return DBName("main")
+}
+
+func DBName(name string) *gorm.DB {
+	if db, ok := (*GormDBGroup)[name]; ok {
+		if Config.ServerConfig.Mode == "debug" {
+			return db.Debug()
+		}
 		return db
 	}
 	return nil
