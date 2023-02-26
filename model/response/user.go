@@ -21,12 +21,12 @@ type UserSimpleInfo struct {
 // @Description: 用户基本信息结构体
 type UserBasicInfo struct {
 	model.UserMeta `json:"-"`
-	Id             uint          `json:"id" label:"用户id"`
-	Uuid           string        `json:"uuid" label:"用户唯一ID"`
-	Avatar         string        `json:"avatar" label:"头像"`
-	Email          string        `json:"email" label:"用户邮箱"`
-	Nickname       string        `json:"nickname" label:"昵称"`
-	Description    string        `json:"description" label:"自我描述"`
-	Password       string        `json:"password" label:"密码"`
-	CreatedAt      time.Duration `json:"createdAt" label:"注册时间"`
+	Id             uint      `json:"id" label:"用户id"`
+	Uuid           string    `json:"uuid" label:"用户唯一ID"`
+	Avatar         string    `json:"avatar" label:"头像"`
+	Email          string    `json:"email" label:"用户邮箱"`
+	Nickname       string    `json:"nickname" label:"昵称"`
+	Description    string    `json:"description" label:"自我描述"`
+	Password       string    `json:"password" label:"密码"`
+	CreatedAt      time.Time `json:"createdAt" label:"注册时间"`
 }
