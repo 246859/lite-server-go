@@ -28,7 +28,7 @@ func (m *Mail) SendAuthMail(ctx *gin.Context) {
 		responseuils.FailWithMsg(ctx, global.I18nRawCN("request.badPrams"))
 		return
 	}
-	if !validateutils.EmailCheck(to) {
+	if err := validateutils.EmailCheck(to); err != nil {
 		responseuils.FailWithMsg(ctx, global.I18nRawCN("mail.errorFormat"))
 		return
 	}
