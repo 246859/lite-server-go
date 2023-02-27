@@ -18,7 +18,7 @@ type ArticleDao struct {
 func (ArticleDao) GetArticleDetails(db *gorm.DB, articleId int) (response.ArticleDetails, error) {
 	var articleDetails response.ArticleDetails
 	err := db.
-		Table("system_users u").
+		Table("users u").
 		Select("a.id id", "u.id user_id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
 		Joins("JOIN articles a ON u.id = a.user_id").
 		Where("a.id=?", articleId).Scan(&articleDetails).Error
@@ -35,8 +35,9 @@ func (ArticleDao) GetArticleInfoList(db *gorm.DB, pageInfo request.PageInfo) ([]
 	page := PageHelper.SelectPage(pageInfo)
 	var articleList []response.HeadInfo
 	model := db.Table("articles a").
-		Select("a.id id", "u.nickname author", "a.title", "a.cover", "a.label", "a.summary", "a.view", "a.content", "a.updated_at").
-		Joins("JOIN system_users u ON u.id = a.user_id")
+		Select("a.id id", "u.nickname author", "a.title", "a.cover", "a.label", "c.name class", "a.summary", "a.view", "a.content", "a.updated_at").
+		Joins("JOIN users u ON u.id = a.user_id").
+		Joins("JOIN classes c ON a.class_id = c.id")
 	if err := page(model, nil, &articleList).Error; err != nil {
 		return nil, err
 	} else {

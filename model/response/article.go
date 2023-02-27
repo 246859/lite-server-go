@@ -17,6 +17,7 @@ type HeadInfo struct {
 	Summary   string    `json:"summary" label:"文章摘要"`
 	View      int       `json:"view" label:"文章浏览量"`
 	Like      int       `json:"like" label:"点赞数"`
+	Class     string    `json:"clazz" label:"分类"`
 	Comment   int       `json:"comment" label:"评论数"`
 	UpdatedAt time.Time `json:"updatedAt" label:"更新时间"`
 }

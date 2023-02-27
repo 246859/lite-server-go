@@ -4,6 +4,7 @@ import (
 	"github.com/246859/lite-server-go/controller/v1c"
 	"github.com/246859/lite-server-go/global"
 	"github.com/246859/lite-server-go/model"
+	"github.com/246859/lite-server-go/model/request"
 	"github.com/246859/lite-server-go/utils/jwtutils"
 	"github.com/246859/lite-server-go/utils/responseuils"
 	"github.com/gin-gonic/gin"
@@ -60,7 +61,7 @@ func (a ArticleModifyController) UpdateArticle(ctx *gin.Context) {
 // @Method http.MethodPost
 // @Description: 创建文章接口
 func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
-	var articleInfo model.Article
+	var articleInfo request.PostArticle
 	if err := ctx.ShouldBind(&articleInfo); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 		return
@@ -71,7 +72,7 @@ func (a ArticleModifyController) CreateArticle(ctx *gin.Context) {
 		return
 	}
 
-	if err := v1c.ArticleService.CreateArticle(&articleInfo, claims.UserClaims); err != nil {
+	if err := v1c.ArticleService.CreateArticle(&articleInfo, claims.UserId); err != nil {
 		responseuils.FailWithMsg(ctx, err.Error())
 	} else {
 		responseuils.OkWithMsg(ctx, global.I18nRawCN("article.create.ok"))

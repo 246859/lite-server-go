@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/246859/lite-server-go/controller/v1c"
 	"github.com/246859/lite-server-go/global"
+	"github.com/246859/lite-server-go/global/code"
 	"github.com/246859/lite-server-go/model/request"
 	"github.com/246859/lite-server-go/model/response"
 	"github.com/246859/lite-server-go/utils/jwtutils"
@@ -166,10 +167,11 @@ func (u UserController) Logout(ctx *gin.Context) {
 	} else {
 		fail = true
 	}
+
 	if fail {
 		responseuils.FailWithMsg(ctx, global.I18nRawCN("authen.fail.logout"))
 	} else {
-		responseuils.OkWithMsg(ctx, global.I18nRawCN("authen.ok.logout"))
+		responseuils.OkWithParams(ctx, code.SuccessLogout, nil, global.I18nRawCN("authen.ok.logout"))
 	}
 }
 

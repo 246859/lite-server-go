@@ -7,10 +7,10 @@ import (
 	"github.com/246859/lite-server-go/model"
 	"github.com/246859/lite-server-go/model/request"
 	"github.com/246859/lite-server-go/model/response"
-	"github.com/246859/lite-server-go/utils/jwtutils"
 )
 
 type ArticleService struct {
+	classDao dao.ClassDao
 }
 
 var ArticleDao = new(dao.ArticleDao)
@@ -61,14 +61,22 @@ func (a ArticleService) ArticleCommentList(pageInfo request.PageInfo, articleId 
 // @Param article *article.Article
 // @Return error
 // @Description: 创建一篇新文章
-func (a ArticleService) CreateArticle(newArticle *model.Article, claims jwtutils.UserClaims) error {
-	newArticle.UserId = claims.UserId
-	err := global.DB().Model(model.Article{}).Create(newArticle).Error
+func (a ArticleService) CreateArticle(newArticle *request.PostArticle, userId uint) error {
+	var article model.Article
+	// 赋值
+	article.UserId = userId
+	article.Title = newArticle.Title
+	article.Cover = newArticle.Cover
+	article.Label = newArticle.Label
+	article.Summary = newArticle.Summary
+	article.Content = newArticle.Content
+	class, err := a.classDao.GetOne(global.DB(), newArticle.Class)
 	if err != nil {
 		return err
-	} else {
-		return nil
 	}
+	// 查询分类ID
+	article.ClassId = class.ID
+	return global.DB().Model(model.Article{}).Create(&article).Error
 }
 
 // DeleteArticle
